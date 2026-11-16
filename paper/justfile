@@ -1,0 +1,17 @@
+# The Perspective, written in RSM.
+
+# Copy the figures from the study and build the HTML page
+build:
+    cp ../study/outputs/figures/wins_pilot.png ../study/outputs/figures/wins_pilot.pdf ../study/outputs/figures/wins_pilot.tif ../study/outputs/figures/wins_pilot_dark.png ../study/outputs/figures/design.png ../study/outputs/figures/design.pdf ../study/outputs/figures/design.tif ../study/outputs/figures/design_dark.png figs/
+    rsm check perspective.rsm
+    # RSM drops the rest of a line after an unescaped %, and rsm check does not catch it
+    ! grep -n '[^\\]%' perspective.rsm
+    rsm build perspective.rsm --sidebar
+
+# Count the words in the main text, as Frontiers counts them (needs a fresh build)
+count:
+    uv run --with beautifulsoup4 python -I count_words.py perspective.html
+
+# Build the supplementary files S1 to S3 as PDFs in supplement/
+supplement:
+    uv run python supplement.py

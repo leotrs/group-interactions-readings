@@ -1,0 +1,36 @@
+# The 3x2 study. See spec.md. Outputs go to $HOI_OUTPUTS, default outputs/.
+
+# List the recipes
+default:
+    @just --list
+
+# Run the tests
+test:
+    nice -n 20 uv run pytest -q -p no:warnings
+
+# Set the world's free numbers for the pilot (writes outputs/tuned/)
+tune:
+    nice -n 20 uv run python tune.py
+
+# Run the replicates of one setting ("pilot" or e.g. "d=0.25"), skipping finished ones
+run setting="pilot" jobs="3":
+    uv run python run.py {{setting}} {{jobs}}
+
+# Tune for every partners-per-day value in the sweep, then run every setting
+sweep jobs="3":
+    for x in 3.0 10.0 25.0; do \
+        test -f outputs/tuned/partners_$x.json || nice -n 20 uv run python tune.py $x; \
+    done
+    uv run python run.py sweep {{jobs}}
+
+# Print the summary of one setting, or "sweep" for all of them
+report setting="pilot":
+    uv run python report.py {{setting}}
+
+# Everything, from tuning to report
+all jobs="3": tune (sweep jobs) (report "sweep")
+
+# Draw the result figures of one setting (default pilot) and the design figure
+figure setting="pilot":
+    uv run python figure.py {{setting}}
+    uv run python design_figure.py
