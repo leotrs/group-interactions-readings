@@ -39,6 +39,7 @@ just run              # the independent check behind File S3
 cd ../paper
 just build            # the HTML page (needs RSM)
 just supplement       # Files S1 to S3 as PDFs (needs pandoc and xelatex)
+just latex            # the Frontiers LaTeX version and its PDF (needs pdflatex)
 ```
 
 Runs that already have a result file are skipped, so delete or move `study/outputs/runs/`
