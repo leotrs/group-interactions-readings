@@ -39,6 +39,10 @@ def inline(t):
         kind = "Figure" if label.startswith("fig-") else "Section"
         return f"{kind}~\\ref{{{label}}}{after}"
     t = re.sub(r":ref:([\w-]+)::([A-Z]?)", ref, t)
+    # A citation that is the subject of the next verb takes the narrative form,
+    # "Rommens et al. (2026) propose"; all others stay in parentheses.
+    t = re.sub(r":cite:([\w,]+):: (propose|describe|calls|say|ask|argue)\b",
+               r"\\citet{\1} \2", t)
     t = re.sub(r":cite:([\w,]+):: \(p\. (\d+)\)", r"\\citep[p.~\2]{\1}", t)
     t = re.sub(r":cite:([\w,]+)::", r"\\citep{\1}", t)
     t = re.sub(r"\*\*(.+?)\*\*", r"\\textbf{\1}", t)
