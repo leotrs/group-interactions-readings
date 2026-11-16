@@ -1,3 +1,10 @@
 perspective.html
 static/
 assets/
+frontiers/*.aux
+frontiers/*.bbl
+frontiers/*.blg
+frontiers/*.log
+frontiers/*.out
+frontiers/build.log
+frontiers/missfont.log

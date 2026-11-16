@@ -15,3 +15,8 @@ count:
 # Build the supplementary files S1 to S3 as PDFs in supplement/
 supplement:
     uv run python supplement.py
+
+# Write the Perspective in the Frontiers LaTeX template and compile it (frontiers/)
+latex:
+    uv run python to_latex.py
+    frontiers/build.sh > frontiers/build.log
