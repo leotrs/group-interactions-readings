@@ -21,7 +21,7 @@
   by the claim that the system under study has group interactions. We distinguish three
   readings of this claim: about how the data were recorded, about which model predicts
   them best, and about how the system works. Each reading needs its own evidence. Model
-  selection on recorded data, which :cite:rommens2026:: propose in this Research Topic
+  selection on recorded data, which Rommens et al. propose in this Research Topic
   as a test of such claims, can provide evidence for the second only. We run a synthetic
   benchmark of the kind that they propose. We simulate people who meet in gatherings and
   adopt a behavior via a pairwise mechanism, a group mechanism, or a mix of the two. The
