@@ -15,7 +15,7 @@ from PIL import Image
 # worlds take muted hues that no model uses. Teal and slate have little color, so the
 # world lines also differ in line style and are labeled directly.
 THEMES = {
-    "light": {"surface": "#fcfcfb", "text": "#2b2b29", "muted": "#5c5b55",
+    "light": {"surface": "#ffffff", "text": "#2b2b29", "muted": "#5c5b55",
               "axis": "#c9c8c0", "graph_linear": "#2a78d6",
               "graph_nonlinear": "#eb6834", "hypergraph": "#1baf7a",
               "pairwise": "#2f6f73", "group": "#a8324a", "mixed": "#6b6f80"},

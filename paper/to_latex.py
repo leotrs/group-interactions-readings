@@ -48,8 +48,16 @@ def inline(t):
     t = re.sub(r"\*\*(.+?)\*\*", r"\\textbf{\1}", t)
     t = re.sub(r'"([^"]+)"', r"``\1''", t)
     t = t.replace("&", r"\&")
+    # pdflatex has no glyphs for these characters outside math mode.
+    for char, tex in (("λ", r"$\lambda$"), ("ν", r"$\nu$"), ("−", r"$-$")):
+        t = t.replace(char, tex)
     t = re.sub(r"(https://\S+?)(\.?)$", r"\\url{\1}\2", t)
     return t
+
+
+def bold_panels(caption):
+    """Frontiers sets panel letters in captions in bold: (A), (A, B)."""
+    return re.sub(r"\(([A-E](?:, [A-E])*)\)", r"\\textbf{(\1)}", caption)
 
 
 def body(text):
@@ -78,7 +86,7 @@ def body(text):
             out.append("\\begin{figure}[h!]\n\\begin{center}\n"
                        f"\\includegraphics[width=\\textwidth]{{{path.name}}}\n"
                        "\\end{center}\n"
-                       f"\\caption{{{inline(caption)}}}\\label{{{label}}}\n"
+                       f"\\caption{{{bold_panels(inline(caption))}}}\\label{{{label}}}\n"
                        "\\end{figure}")
         elif part.strip() == "::":
             continue
@@ -131,7 +139,9 @@ def word_count():
     subprocess.run(["just", "build"], cwd=HERE, check=True, capture_output=True)
     res = subprocess.run(["just", "count"], cwd=HERE, check=True, capture_output=True,
                          text=True)
-    return int(res.stdout.strip().splitlines()[-1].split()[-1])
+    # The larger count, which includes the bold run-in paragraph leads, so that the
+    # number on the first page holds under either reading of Frontiers' rule.
+    return int(res.stdout.strip().splitlines()[-2].split()[-1])
 
 
 def main():

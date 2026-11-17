@@ -8,12 +8,12 @@ On the machine that made the results (Apple M-series, macOS) every number comes 
 identical, and the check says so. On other processors the maximum-likelihood fits stop
 at slightly different points: fitted parameters can differ by about one part in 10,000,
 the size of the optimizer's stopping tolerance, and rates fitted as zero (at the lower
-bound, about 1e-17 per second) can come out as another value near zero. The largest
-relative difference is then often 1 and says nothing by itself. The check asks whether
-the results of the paper are reproduced: in every world and record, the same model must
-win under every criterion, and every predicted effect must be within EFFECT_TOL
-percentage points. It also prints the largest relative difference among all numbers.
-Exits with an error if a result of the paper is not reproduced.
+bound, exp(-40), about 4e-18 per second) can come out as another value near zero. The
+largest relative difference is then often 1 and says nothing by itself. The check asks
+whether the results of the paper are reproduced: in every world and record, the same
+model must win under every criterion, and every predicted effect must be within
+EFFECT_TOL percentage points. It also prints the largest relative difference among all
+numbers. Exits with an error if a result of the paper is not reproduced.
 """
 
 import json

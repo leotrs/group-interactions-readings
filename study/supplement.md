@@ -1,14 +1,14 @@
 # Supplementary File S2: three ways of holding out data
 
-Rommens et al. (arXiv 2609.26031v2, p. 16, item iii) recommend reporting "predictive log
-loss on held-out trajectories or interventions". The main text holds out a second
-spreading process on the same recorded contacts, started from different first adopters.
-The models are fitted to the first process and scored on the second.
+Rommens et al. (2026) recommend reporting how well a model predicts held-out data. The
+main text holds out a second spreading process on the same recorded contacts, with its
+own first adopters, drawn independently of those of the first. The models are fitted to
+the first process and scored on the second.
 
 Two other ways of holding out data are possible when only one process is recorded:
 
-- split by people: fit on a random half of the people over the whole time, and score the
-  other half;
+- split by people: keep each person with probability one half, fit on the people kept
+  over the whole time, and score the others;
 - split in time: fit on the adoptions before the median adoption time, and score the
   adoptions after it.
 
@@ -22,11 +22,12 @@ Two other ways of holding out data are possible when only one process is recorde
 
 Runs won by each model, out of 20, by held-out misfit, in the setting described in the
 main text. Each row is a kind of spreading (the pairwise, group or mixed world) and a
-way of holding out data. Left: meeting log. Right: sensors. A tied run counts for each
-model in the tie, and models whose scores are equal up to numerical error tie. On the
-log, the nonlinear graph model and the hypergraph model make identical predictions
-(File S1), so they tie in every run that the linear graph model does not win alone.
-Source: `just figures`, outputs/runs/main.
+way of holding out data. (A) Meeting log. (B) Sensors. A tied run counts for each model
+in the tie, and models whose scores are equal up to numerical error tie. On the log,
+each person is in one gathering at a time, so the people in contact with a person are
+exactly the members of that person's gathering, and the nonlinear graph model and the
+hypergraph model make identical predictions. They therefore tie in every run that the
+linear graph model does not win alone.
 
 On the log, the second process and the split by people agree: in the pairwise world the
 linear graph model wins alone in 12 and 10 runs, and in the other two worlds in at most

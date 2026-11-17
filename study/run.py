@@ -9,11 +9,11 @@ Writes outputs/runs/SETTING/run_RR.json. A run is skipped if its file exists and
 made from the current tuning file, so an interrupted job resumes where it stopped.
 
 Run r draws everything from the random seed r, in a fixed order: the gatherings, a
-random half of the people (for one of the other ways of holding out data), the sensor
-record, and then, for each world in turn, the fitted and the held-out spreading
-processes. The same run number therefore gives the same gatherings and records in all
-three worlds, and the same results on every machine with the same library versions.
-"""
+random subset of about half the people (for one of the other ways of holding out data),
+the sensor record, and then, for each world in turn, the fitted and the held-out
+spreading processes. The same run number therefore gives the same gatherings and records
+in all three worlds, and the same results on every machine with the same library
+versions. """
 
 import json
 import os

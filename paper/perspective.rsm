@@ -17,24 +17,25 @@
   :keywords: {higher-order networks, hypergraphs, group interactions, model selection, causal inference, interventions}
 }
 
-  Studies of higher-order networks often justify representing data as a hypergraph by
-  the claim that the system has group interactions. We distinguish three readings of
-  this claim: about how the data were recorded, which model predicts them best, and how
-  the system works. Each reading needs its own evidence. Model selection on recorded
-  data, which Rommens et al. propose in this Research Topic as a test of such claims,
-  can support only the second. In a simulated benchmark, people meet in gatherings,
-  recorded by a meeting log and proximity sensors, and adopt a behavior through a
-  pairwise mechanism, a group mechanism, or both. We compare graph and hypergraph models
-  by message length: the bits to encode the recorded structure, the dynamical rule, and
-  the held-out data that the model leaves unexplained. Whether the hypergraph model has
-  the shorter message length depends on how the contacts were recorded, not on how the
-  behavior spreads. When adoption depends on groups, the models fitted to the meeting
-  log underestimate how much meeting adopters together, rather than one at a time,
-  raises the chance of adopting. Adding a separate rate for two or more adopters
-  corrects this on the meeting log, but on the sensor record it reports a group effect
-  where there is none, and model selection prefers it. We recommend that authors say
-  which reading they intend, report the bits for the recorded structure separately, and
-  test or state the causal assumptions behind any claim about the system.
+  Studies of higher-order networks often justify a hypergraph representation by the
+  claim that the system has group interactions. We distinguish three readings of this
+  claim: about how the data were recorded, which model predicts them best, and how the
+  system works. Each reading needs its own evidence. Model selection on recorded data,
+  which Rommens et al. propose in this Research Topic as a test of such claims, can
+  support only the second. In a simulated benchmark, people meet in gatherings, recorded
+  by a meeting log and proximity sensors, and adopt a behavior through a pairwise or a
+  group mechanism, or both. We compare graph and hypergraph models by message length:
+  the bits to encode the recorded structure, the dynamical rule, and the held-out data
+  that the model leaves unexplained. Whether the hypergraph model has the shorter
+  message length depends on how the contacts were recorded, not on how the behavior
+  spreads. When adoption depends on groups, models fitted to the meeting log
+  underestimate how much meeting adopters together, rather than one at a time, raises
+  the chance of adopting. A model with a separate rate for recorded groups of two or
+  more adopters corrects this on the meeting log, but on the sensors it reports a group
+  effect where there is none and beats both graph models on held-out data. Authors
+  should say which reading they intend, report the bits for the recorded structure
+  separately, and test or state the causal assumptions behind any claim about the
+  system.
 
 ::
 
@@ -65,13 +66,13 @@ propose in this Research Topic. They propose to test claims of group interaction
 model selection: fit graph and hypergraph models to the same data, and prefer the model
 that describes three parts together in fewer bits: the recorded structure, the rule of
 the dynamics, and the data that the model leaves unexplained. In our simulation, the
-verdict of model selection changes with how the contacts were recorded and not with the
-mechanism of spreading. When adoption depends on groups, models fitted to a complete
-record of the contacts underestimate how much meeting adopters together, rather than one
-at a time, raises the chance of adopting. A model with a separate rate for two or more
-adopters corrects this, but when the contacts are recorded by proximity sensors that
-miss some of them, it reports a group effect in a world without one, and model selection
-prefers it.
+message-length verdict, graph or hypergraph, changes with how the contacts were recorded
+and not with the mechanism of spreading. When adoption depends on groups, models fitted
+to a complete record of the contacts underestimate how much meeting adopters together,
+rather than one at a time, raises the chance of adopting. A model with a separate rate
+for recorded groups of two or more adopters corrects this, but when the contacts are
+recorded by proximity sensors that miss some of them, it reports a group effect in a
+world without one and beats both graph models on held-out data.
 
 ## Three readings of the claim {
   :label: sec-argument
@@ -85,7 +86,7 @@ measured by statistical fit or, in some studies, by qualitative agreement alone.
 third concerns causation in the system itself: the response of one component depends
 jointly on several others, in a way that does not decompose into pairwise effects
 :cite:perezreche2026::. The three readings correspond roughly to the three tasks into
-which data science is commonly divided, description, prediction, and causal inference
+which data science is commonly divided: description, prediction, and causal inference
 :cite:hernan2019::, each with its own standard of evidence.
 
 None of the three readings follows from the one before it. Data recorded as groups
@@ -133,13 +134,13 @@ asm-untestable} that the recorded contacts are the routes of spreading, and that
 meets whom does not depend on adoption or its causes::
 :cite:pearl2009overview,shalizi2011::. A third is given in :ref:sec-recommendations::.
 
-For the second reading, model selection is certainly the right tool currently at our
-disposal, and for data recorded without changing the system it is the only tool
-available. We argue for adding to it: test the causal reading by changing the system
-when possible and ethical, and otherwise state the causal assumptions on which every
-causal reading of recorded data rests :cite:pearl2009overview::. Stating them is one way
-to express in causal terms what :cite:perezreche2026:: calls reducibility: whether a
-higher-order model can be replaced by a lower-order one.
+For the second reading, model selection is the right tool at our disposal, and for data
+recorded without changing the system it is the only tool available. We argue for adding
+to it: test the causal reading by changing the system when possible and ethical, and
+otherwise state the causal assumptions on which every causal reading of recorded data
+rests :cite:pearl2009overview::. Stating them is one way to express in causal terms what
+:cite:perezreche2026:: calls reducibility: whether a higher-order model can be replaced
+by a lower-order one.
 
 In :ref:sec-study::, we test the argument in a benchmark of the kind that
 :cite:rommens2026:: propose, in which the mechanism is known, and examine its results
@@ -161,17 +162,17 @@ Spreading is built in three ways, which we call worlds (:ref:fig-design::A). In 
 pairwise world, each adopter in a person's gathering converts that person at a constant
 rate. In the group world, a person adopts at a constant rate while at least two adopters
 are present, and never with only one. The mixed world has both mechanisms at half
-strength. In every world, about half of the people adopt.
+strength. Between half and 60\% of the people adopt, depending on the world.
 
 **Records.** A run simulates the gatherings and two independent spreading processes of
 the same world over them. Each run is recorded in two ways, and we call each recording a
 record (:ref:fig-design::B). A meeting log lists every gathering with its members, start
 and end. Proximity sensors sample every 20 seconds and detect each pair in a gathering
-with probability one half, close to the share of interaction time, about half, that RFID
-badges detected in a field test against video recordings :cite:elmer2019::. At each
-sample, the recorded groups are the connected components of the graph of detected pairs.
-In both records, each person is in at most one recorded group at a time, and the
-adoption times are included.
+with probability one half, close to the share of interaction time, about half, that
+radio-frequency badges detected in a field test against video recordings
+:cite:elmer2019::. At each sample, the recorded groups are the connected components of
+the graph of detected pairs. In both records, each person is in at most one recorded
+group at a time, and the adoption times are included.
 
 **Models and scores.** Three models give each person who has not adopted a rate of
 adoption that depends on the contacts recorded at that moment, plus a constant
@@ -182,10 +183,10 @@ is raised to a fitted power; and a hypergraph model, in which the number of adop
 each of the person's recorded groups is raised to a fitted power and the results are
 summed. Each model is fitted by maximum likelihood to the first spreading process of a
 run and scored on the second. We use two scores (:ref:fig-design::D). The message length
-proposed by :cite:rommens2026:: is the sum of three parts: the bits for writing down who
-met whom in the record (the structure), the bits for writing down the fitted rule, and
-the misfit, which is minus the base-2 logarithm of the likelihood of the adoption times
-in the held-out process. The held-out misfit is the last of these alone.
+that :cite:rommens2026:: propose is the sum of three parts: the bits for writing down
+who met whom in the record (the structure), the bits for writing down the fitted rule,
+and the misfit, which is minus the base-2 logarithm of the likelihood of the adoption
+times in the held-out process. The held-out misfit is the last of these alone.
 
 **Settings.** We changed each of six hyperparameters separately from its main value, for
 14 settings in all, each with 20 runs of each world (:ref:fig-design::E). Supplementary
@@ -202,17 +203,15 @@ File S1 gives the full specification of the study.
   :caption: Design of the simulated study. (A) Adoption rate in each world. (B) One
   gathering as recorded by the meeting log and by the sensors at one sample. (C) Rate
   given by each model to a person whose sensor group holds two adopters, only one of
-  them detected with the person. (D) Parts of the two scores. (E) Hyperparameters: the
-  main setting and the values tried one at a time.
+  them detected with the person, with rate λ = 1 per adopter and fitted power ν = 2. (D)
+  Parts of the two scores. (E) Hyperparameters: the main setting and the values tried
+  one at a time.
 
 ::
 
 ### Results {
   :label: sec-results
 }
-
-We assess the results under each of the three readings, which follow the division of
-data science into description, prediction and causal inference (:ref:sec-argument::).
 
 :figure: {
   :label: fig-wins
@@ -224,10 +223,10 @@ data science into description, prediction and causal inference (:ref:sec-argumen
 
   :caption: Results in the main setting. (A, B) Runs won by each model, out of 20.
   Models whose scores are equal up to numerical error tie, and a tied run counts for
-  each model in the tie. (C) True effect (bars) and median predicted effect (markers,
-  with interquartile range) of meeting two adopters together rather than one at a time.
-  Hollow diamonds: the linear graph model with an added group rate, which takes no part
-  in the comparisons in A and B.
+  each model in the tie. (C) True effect (horizontal lines) and median predicted effect
+  (markers, with interquartile range) of meeting two adopters together rather than one
+  at a time. Hollow diamonds: the linear graph model with an added group rate, which
+  takes no part in the comparisons in A and B.
 
 
 ::
@@ -235,7 +234,7 @@ data science into description, prediction and causal inference (:ref:sec-argumen
 **Description.** Only the meeting log meets the standard of measurement given in
 :ref:sec-argument::, because its recorded groups are the gatherings. Missed detections
 split many gatherings into several partial groups, so that per run the sensors record a
-median of about 1,500 groups with different members, and the meeting log 266.
+median of about 1,500 distinct groups, and the meeting log 266.
 
 **Prediction: message length.** Under the message length, whether a graph model or the
 hypergraph model is preferred changes with the recording and not with the spreading
@@ -256,8 +255,7 @@ meeting log, the held-out misfit can therefore only distinguish a rate that grow
 linearly with the number of adopters present from one that does not: the linear graph
 model wins alone in 12 of 20 runs in the pairwise world, and in only 2 of 40 runs in the
 other two worlds. On the sensor record, the hypergraph model wins every run in all three
-worlds, because its groups include pairs that the sensors missed. Its win reflects the
-recording rather than the mechanism.
+worlds, because its groups include pairs that the sensors missed.
 
 **Causation.** On the meeting log, :ref:asm-untestable,the two assumptions:: that cannot
 be confirmed from the data hold by construction: the recorded contacts are the only
@@ -267,23 +265,22 @@ a person's chance of adoption changes when the person meets two adopters togethe
 than one at a time (:ref:fig-wins::C). In the group world, a person who meets two
 adopters together for 15 minutes has a 63\% chance of adopting, and one who meets them
 one at a time, each for 15 minutes, never adopts, so the true effect is 63 percentage
-points. For the fitted models, the same chances are computed from the fitted rule
-without the background rate. Fitted to the meeting log, the nonlinear graph model and
-the hypergraph model predict an effect of about 15 points, and the linear graph model
-predicts none, since its rate is the same whether adopters are met together or not. In
-the mixed world, the true effect is 35 points, and the fitted models predict about 7 or
-less. The models fitted to the sensor record come no closer. In the pairwise world,
-where the true effect is zero, all three models predict an effect close to zero. All
-predictions are medians over runs.
+points. Fitted to the meeting log, the nonlinear graph model and the hypergraph model
+predict an effect of about 14 points, and the linear graph model predicts none, since
+its rate is the same whether adopters are met together or not. In the mixed world, the
+true effect is 35 points, and the fitted models predict about 7 or less. The models
+fitted to the sensor record come no closer. In the pairwise world, where the true effect
+is zero, the three models predict between about −5 and 0 points. All predictions are
+medians over runs.
 
 **Causation: wider rules.** None of the three models can represent a rate that is zero
 with one adopter present and positive with two, so we also fitted the linear graph model
-with an added rate for when at least two adopters are in contact with the person or in
-one of the person's recorded groups (:ref:fig-wins::C, Supplementary File S3). On the
-meeting log, this model recovers the effect: a median of 63 points in the group world
-and 31 in the mixed world. On the sensors, the version with recorded groups predicts an
-effect of 10 points in the pairwise world, where there is none, and has a lower held-out
-misfit than the nonlinear graph model in 20 of 20 runs.
+with an added rate for each of the person's recorded groups that holds at least two
+adopters (:ref:fig-wins::C, Supplementary File S3). On the meeting log, this model
+recovers the effect: a median of 63 points in the group world and 31 in the mixed world.
+On the sensors, it predicts an effect of 10 points in the pairwise world, where there is
+none, and has a lower held-out misfit than both graph models in 20 of 20 runs, though
+not than the hypergraph model.
 
 ## Discussion {
   :label: sec-recommendations
@@ -296,8 +293,8 @@ whether the claim concerns the data, the model, or the system.
 
 Read as description, the claim is justified by how the data were collected, and only if
 the recorded groups are the groups that the study is about. Readers can judge this only
-if they know how the groups were formed, so when presenting evidence for description,
-authors should report how the groups were formed.
+if they know how the groups were formed, so authors presenting evidence for description
+should report it.
 
 On the meeting log, the nonlinear graph model and the hypergraph model made identical
 predictions in our simulation. A graph model with a response that is nonlinear in the
@@ -327,19 +324,20 @@ cannot be changed while their number is kept fixed, and meeting the same people 
 or one at a time is the closest version of this intervention. Whenever possible,
 researchers should test the causal reading directly by intervening on the system.
 
-From recorded data, a fitted model answers the causal question correctly only if the
-recorded contacts are the routes of influence, who meets whom does not depend on the
-outcome or its causes, and the rules compared include the true form of the response. The
-first two cannot be confirmed from the data :cite:pearl2009overview,shalizi2011::. In
-our simulation, both held for the meeting log, but the third did not, and the fitted
-models underestimated the effect of meeting together about fourfold or more. A model
-with a separate rate for two or more adopters recovered the effect. On the sensors,
-where the recorded contacts miss some routes of spreading, a model of the same kind
-reported a group effect in the pairwise world, and model selection preferred it. A model
-that wins the comparison can therefore still give the wrong causal answer, and one
-cannot tell from the record whether it does. Where the system cannot be changed, authors
-should state the three assumptions and probe the third by widening the set of rules
-compared.
+From recorded data, a fitted model answers the causal question correctly only under
+three assumptions: that the recorded contacts are the routes of spreading, that who
+meets whom does not depend on adoption or its causes, and that the rules compared
+include the true form of the response. The first two cannot be confirmed from the data
+:cite:pearl2009overview,shalizi2011::. In our simulation, both held for the meeting log,
+but the third failed where adoption depends on groups, and the fitted models
+underestimated the effect of meeting together about fourfold or more. A model with a
+separate rate for recorded groups of two or more adopters recovered the effect. On the
+sensors, where the recorded contacts miss some routes of spreading, the same model
+reported a group effect in the pairwise world and beat both graph models on held-out
+data. A model that beats its rivals on held-out data can therefore still give the wrong
+causal answer, and one cannot tell from the record whether it does. Where the system
+cannot be changed, authors should state the three assumptions and probe the third by
+widening the set of rules compared.
 
 Two questions remain open: how to build criteria whose verdict changes with the
 mechanism rather than with the record, and whether recorded data can contain enough

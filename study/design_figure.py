@@ -35,7 +35,7 @@ def worlds_panel(ax, p, t):
         ax.plot([0, 1, 2, 2, *k[3:]], [r[0], r[1], jump, *r[2:]], ls=dashes[w],
                 color=t[w], lw=2.0)
         ax.plot(k, r, "o", ls="none", color=t[w], ms=4)
-        ax.text(k[-1] + 0.15, r[-1], w, fontsize=8, va="center", color=t["text"])
+        ax.text(k[-1] + 0.35, r[-1], w, fontsize=8, va="center", color=t["text"])
     ax.set_xlim(0, PEOPLE + 1.6)
     ax.set_xticks(k)
     ax.set_yticks(range(5))
@@ -198,11 +198,11 @@ def settings_panel(ax, t):
     ax.set_facecolor(t["surface"])
     ax.set_title("(E) Settings", fontsize=9, loc="left", color=t["text"])
     ax.axis("off")
-    rows = [("header", "hyperparameter", "main setting", "also tried, one at a time")]
+    rows = [("header", "hyperparameter", "main setting", "also tried")]
     for k, vs in SWEEP.items():
         name, show = SHOWN[k]
         rows.append(("row", name, show(MAIN[k]), ", ".join(show(v) for v in vs)))
-    cols = (0.0, 0.45, 0.68)
+    cols = (0.0, 0.50, 0.78)
     step = 1 / len(rows)
     y = 1 - step / 2
     rule = {"color": t["muted"], "lw": 2.0, "transform": ax.transAxes, "clip_on": False}

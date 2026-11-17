@@ -25,16 +25,19 @@ seconds unless stated. The code that implements each part is named in brackets.
 
 - Each spreading process starts with 24 first adopters drawn uniformly at random.
   Adoption is permanent.
-- A person who has not adopted and is in a gathering with k adopters adopts at rate
-  - pairwise world: lam * k, with lam = 0.469 per hour (1.3013e-4 per second);
-  - group world: mu if k >= 2 and 0 otherwise, with mu = 4 per hour (1/900 per second);
-  - mixed world: (lam / 2) * k + (mu / 2 if k >= 2).
-  There is no adoption outside gatherings.
+- A person who has not adopted and is in a gathering with k adopters adopts at the
+  following rate:
+  - pairwise world: `lam * k`, with lam = 0.468 per hour (1.3013e-4 per second);
+  - group world: `mu` if k >= 2 and 0 otherwise, with mu = 4 per hour (1/900 per
+    second);
+  - mixed world: `(lam / 2) * k`, plus `mu / 2` if k >= 2.
+- There is no adoption outside gatherings.
 - Tuning, in this order: mu is fixed at 1/900 per second; the number of first adopters
   is the smallest, counting up from 2, at which at least half of the people adopt in the
   group world (24); with those, lam is found by bisection on a log scale so that half
-  adopt in the pairwise world. Each check averages 30 runs. In the main setting, 49% to
-  61% of people adopt, by world, counting the first adopters.
+  adopt in the pairwise world. Each check of the share who adopt averages 30 runs; the
+  gathering-rate bisection above averages 5 draws of the gatherings, with seed 0. In the
+  main setting, 49% to 61% of people adopt, by world, counting the first adopters.
 - Spreading is simulated exactly: between the start or end of a gathering and the next
   adoption, all rates are constant, so the time to the next adoption is exponential.
 
@@ -43,6 +46,8 @@ seconds unless stated. The code that implements each part is named in brackets.
 - A run draws one set of gatherings, then, for each world, two independent spreading
   processes over them, each with its own 24 first adopters. The first process is used
   for fitting and the second is held out.
+- One sensor record is drawn per run, before the spreading processes, and serves all
+  three worlds and both processes of that run.
 - Meeting log: every gathering with its members, start and end, plus the adoption times.
 - Sensors: samples at every multiple of 20 seconds from the start of the event. At each
   sample that falls inside a gathering, each pair in the gathering is detected
@@ -55,30 +60,33 @@ seconds unless stated. The code that implements each part is named in brackets.
 ## Models and fitting [models.py]
 
 - For a person i who has not adopted, with a_i adopters in contact now and a_e adopters
-  in each current recorded group e:
-  - linear graph: lam * a_i + b;
-  - nonlinear graph: lam * a_i^nu + b;
-  - hypergraph: lam * sum over e of a_e^nu + b.
-  On the log, "in contact" means in the same gathering. On the sensors, it means in a
-  pair detected within the last 20 seconds.
+  in each current recorded group e, the rate is:
+  - linear graph: `lam * a_i + b`;
+  - nonlinear graph: `lam * a_i^nu + b`;
+  - hypergraph: `lam * (sum over e of a_e^nu) + b`.
+- On the log, "in contact" means in the same gathering. On the sensors, it means in a
+  pair detected at the latest sample, that is, within the last 20 seconds.
 - Likelihood: the usual one for event times, in seconds. It is the sum of the log rates
   at the adoptions minus the integral of all rates over the event. The first adopters
   are taken as given.
-- Fit: maximum likelihood with L-BFGS-B, over log lam and log b (both bounded to [-40,
-  5]) and nu in [0.05, 6], from 9 starting points for the linear model and 36 for the
+- Fit: maximum likelihood with L-BFGS-B, over the natural logarithms of lam and b (both
+  bounded to [-40, 5]) and nu in [0.05, 6], from 9 starting points for the linear model and 36 for the
   others; the best fit is kept.
 
 ## Scores [run.py, codes.py, results.py]
 
-- Structure bits (Rommens et al., Proposition 7; the mixed-size form is ours). Only who
-  met whom is coded, not when.
-  - Graph: log2(P + 1) + log2 C(P, m), with P = C(200, 2) and m the number of distinct
-    pairs.
-  - Hypergraph: log2(200) for the largest size, then for each size k from 2 up to it,
-    log2(S_k + 1) + log2 C(S_k, M_k), with S_k = C(200, k) and M_k the number of
+- Structure bits. The main terms, which name the pairs or groups that met among all
+  possible ones, follow Proposition 7 of Rommens et al. (2026), which covers groups of a
+  single size. The terms for stating the counts and the largest size, and the sum over
+  sizes, are ours. Only who met whom is coded, not when.
+  - Graph: `log2(P + 1) + log2 C(P, m)`, with P = C(200, 2) and m the number of
+    distinct pairs.
+  - Hypergraph: `log2(200)` for the largest size, then for each size k from 2 up to it,
+    `log2(S_k + 1) + log2 C(S_k, M_k)`, with S_k = C(200, k) and M_k the number of
     distinct groups of size k.
-- Rule bits: (1/2) log2(n) for each parameter, with n the number of adoptions in the
-  fitted process, not counting first adopters. The linear graph model has 2 parameters
+- Rule bits: `(1/2) log2(n)` for each parameter, with n the number of adoptions in the
+  fitted processes (all of them, when several are fitted), not counting first
+  adopters. The linear graph model has 2 parameters
   (lam, b); the other two have 3 (lam, b, nu).
 - Misfit: minus the log-likelihood, in bits, of the held-out process under the
   parameters fitted to the first process. Because adoption times are continuous, this is
@@ -92,11 +100,11 @@ seconds unless stated. The code that implements each part is named in brackets.
 - A person who has not adopted meets two adopters either together, in one gathering of
   15 minutes, or one at a time, in two gatherings of 15 minutes each. The effect is the
   chance of adopting together minus the chance one at a time.
-- True chances from the world's rule: 1 - exp(-r(2) * 900) together and 1 - exp(-2 *
-  r(1) * 900) one at a time, with r(k) the rate above.
-- Predicted chances from each fitted model, without the background rate b: 1 - exp(-lam
-  * 2^nu * 900) together and 1 - exp(-2 * lam * 900) one at a time (nu = 1 for the
-  linear graph model). These are the same for a record of either kind.
+- True chances from the world's rule, with r(k) the rate above: together
+  `1 - exp(-r(2) * 900)`, one at a time `1 - exp(-2 * r(1) * 900)`.
+- Predicted chances from each fitted model, without the background rate b: together
+  `1 - exp(-lam * 2^nu * 900)`, one at a time `1 - exp(-2 * lam * 900)`, with nu = 1 for
+  the linear graph model. These are the same for a record of either kind.
 - Reported: the median over runs, with the interquartile range.
 
 ## Settings [settings.py, records.py, run.py, tune.py]
@@ -123,16 +131,18 @@ has 20 runs, with run seeds 0 to 19.
 
 ## Model with a group rate, for the causal effect only [models.py, run.py]
 
-- rate = lam * a_i + mu * (number of the person's current recorded groups e with a_e >= 2)
-  + b, with a_i and a_e as in "Models and fitting". On the meeting log a person is in
-  one gathering at a time, so the group term is mu when at least two adopters share the
-  person's gathering.
-- Fitted by maximum likelihood to the first process, like the other models, over log lam,
-  log b and log mu (each bounded to [-40, 5]) from 27 starting points.
-- It is not part of the comparisons by message length or held-out misfit. Its predicted
-  effect uses together = 1 - exp(-(2 * lam + mu) * 900) and one at a time = 1 - exp(-2 *
-  lam * 900), without b. Figure 2C shows it as hollow diamonds.
+- The rate is `lam * a_i + mu * g + b`, with g the number of the person's current
+  recorded groups that hold at least two adopters, and a_i as in "Models and fitting".
+  On the meeting log a person is in one gathering at a time, so the group term is mu
+  when at least two adopters share the person's gathering.
+- Fitted by maximum likelihood to the first process, like the other models, over the
+  natural logarithms of lam, b and mu (each bounded to [-40, 5]) from 27 starting
+  points.
+- It takes no part in the comparisons of Figure 2A and 2B. Its predicted effect uses
+  together `1 - exp(-(2 * lam + mu) * 900)` and one at a time
+  `1 - exp(-2 * lam * 900)`, without b. Figure 2C shows it as hollow diamonds.
 - Main setting, 20 runs: median predicted effect 63.5 points on the log and 56.4 on the
   sensors in the group world, 31.2 and 30.3 in the mixed world, and 0.0 and 10.1 in the
   pairwise world. On the sensors in the pairwise world, its held-out misfit is lower than
-  that of the nonlinear graph model in 20 of 20 runs.
+  that of both graph models in 20 of 20 runs, and higher than that of the hypergraph
+  model in 20 of 20 runs.

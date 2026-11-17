@@ -6,9 +6,10 @@ Systems Research Topic "Higher order versus pairwise interactions: A modeling de
 
 The paper distinguishes three readings of the claim that a system has group
 interactions: about how the data were recorded, about which model predicts them best,
-and about how the system works. A simulated benchmark shows that comparing graph and
-hypergraph models on recorded data supports only the second reading. This repository
-holds that benchmark, an independent check of one of its results, and the paper.
+and about how the system works. It argues that comparing graph and hypergraph models on
+recorded data supports only the second reading, and tests the argument in a simulated
+benchmark. This repository holds that benchmark, an independent check of one of its
+results, and the paper.
 
 ## Contents
 
@@ -29,11 +30,12 @@ just test        # unit tests, about 10 s
 just verify      # recompute the tuning and three runs; compare with the saved results
 just report      # the numbers reported in the paper (main setting)
 just figures     # Figures 1 and 2 and the figure of File S2, from the saved runs
-just all         # everything from scratch, about an hour with 3 processes
+just all         # whatever is missing (the saved results are in outputs/)
+just fresh       # everything from scratch into outputs_fresh/, about an hour
 
 cd ../independent_check
-just run         # the 20 runs behind File S3, about 10 s
-just verify      # rerun them and check that the results file comes out identical
+just run         # the 20 runs behind File S3, about 15 s
+just verify      # rerun them; the results file must come out byte for byte the same
 
 cd ../paper
 just build       # the web version (needs RSM)
@@ -42,12 +44,12 @@ just supplement  # Supplementary Files S1 to S3 as PDFs (needs pandoc and xelate
 ```
 
 Every random draw comes from a fixed seed, so the code gives the saved results exactly
-with the locked library versions on the machine that made them (Apple M-series,
-macOS). On other processors the fits stop at slightly different points (parameters
-differ by about one part in 10,000, and rates fitted as zero come out as other values
-near zero), and `just verify` checks that every
-winner and every predicted effect of the paper is still the same. The tests and the
-check run on every push, on Linux (`.github/workflows/tests.yml`).
+with the locked library versions on the machine that made them (Apple M-series, macOS).
+On other processors the fits stop at slightly different points (parameters differ by
+about one part in 10,000, and rates fitted as zero come out as other values near zero).
+There, `just verify` in study/ checks that every winner and every predicted effect of
+the paper is still the same. The tests and the check run on every push, on Linux
+(`.github/workflows/tests.yml`).
 
 ## Citation
 

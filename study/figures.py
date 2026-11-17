@@ -57,16 +57,18 @@ def draw_effect(ax, rows, t):
         for n, m in enumerate(pred):
             lo, mid, hi = pred[m]
             x = x0 + (n - (len(pred) - 1) / 2) * 0.25
+            color = t["text"] if m in CHECK_MODELS else t[m]
+            # The interquartile range as a line under the marker. The marker has no edge,
+            # so a range shorter than the marker stays hidden behind it instead of
+            # leaving fragments around its edge.
+            ax.plot([x, x], [lo, hi], color=color, lw=2.0, zorder=2)
             if m in CHECK_MODELS:
                 # Not one of the compared models, so it is drawn hollow in ink rather
                 # than in a fourth series color.
-                ax.plot([x, x], [lo, hi], color=t["text"], lw=2.0, zorder=2)
                 ax.plot(x, mid, "D", ms=7, mfc=t["surface"], mec=t["text"], mew=2.0,
                         zorder=3)
                 continue
-            ax.plot([x, x], [lo, hi], color=t[m], lw=2.0, zorder=2)
-            ax.plot(x, mid, MARKERS[m], ms=8, color=t[m], mec=t["surface"], mew=1.0,
-                    zorder=3)
+            ax.plot(x, mid, MARKERS[m], ms=8, color=t[m], mew=0, zorder=3)
         ticks.append(x0)
         labels.append(rec)
         centers.setdefault(w, []).append(x0)

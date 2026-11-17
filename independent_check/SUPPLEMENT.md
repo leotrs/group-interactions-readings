@@ -26,7 +26,7 @@ differ from those of the main runs by at most 6 points (mixed world, log: 36.7 h
 31.2 there), and it gives the same pattern: close to the true effect on the meeting log,
 and a false group effect on the sensors in the pairwise world (11.3 here, 10.1 there).
 As a check, its nonlinear graph model fitted to the meeting log predicts 13.6 points in
-the group world and 7.6 in the mixed world, against about 15 and about 7 or less in the
+the group world and 7.6 in the mixed world, against about 14 and about 7 or less in the
 main text.
 
 ## Predicted effect of meeting two adopters together rather than one at a time
@@ -57,5 +57,3 @@ On the sensors in the pairwise world, the group form has the lower held-out misf
 of 20 runs (median difference 26 bits) and predicts an effect of 11 points where there
 is none. The sensors miss pairs through which spreading happens, so the recorded
 contacts are not the routes of spreading.
-
-Source: `just run` in this folder; full tables in RESULTS.md.

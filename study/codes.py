@@ -2,9 +2,11 @@
 length.
 
 The codes follow Proposition 7 of Rommens et al. (2026), extended to groups of mixed
-sizes. A second graph code names cliques instead of pairs (their p. 18); the paper's
-results hold under both. The codes count who met whom, not when, so the times in a
-record are not coded.
+sizes. A second graph code names cliques instead of pairs (their p. 18). The paper
+reports the pair code. Under the clique code the main setting gives the same winners,
+but with 25 people met a day the hypergraph model wins on the meeting log instead of the
+graph models. The codes count who met whom, not when, so the times in a record are not
+coded.
 """
 
 from collections import Counter, defaultdict

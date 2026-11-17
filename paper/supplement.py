@@ -30,7 +30,8 @@ def main():
         with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as tmp:
             tmp.write(text)
         subprocess.run(["pandoc", tmp.name, "-o", str(OUT / f"{name}.pdf"),
-                        "--pdf-engine=xelatex", "-V", "geometry:margin=2cm",
+                        "--pdf-engine=xelatex", "-V", "papersize=a4",
+                        "-V", "geometry:margin=2cm",
                         "-V", "fontsize=10pt", "-V", "mainfont=Helvetica Neue",
                         "-V", "colorlinks=true"], check=True)
         print("wrote", OUT / f"{name}.pdf")

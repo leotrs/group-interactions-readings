@@ -13,7 +13,8 @@ nonlinear graph model and a hypergraph model) are fitted to each record and comp
 message length and by held-out misfit. Each fitted model also predicts how much more
 likely a person is to adopt after meeting two adopters together rather than one at a
 time, and the prediction is compared with the true effect. A fourth model, the linear
-graph model with an added group rate, is fitted for that prediction only.
+graph model with an added group rate, is fitted for that prediction and compared with
+the others only by held-out misfit.
 
 ## Where each part of the paper comes from
 
@@ -45,26 +46,27 @@ just test       # unit tests (about 10 s)
 just verify     # recompute the tuning and three runs; compare with the saved results
 just report     # the numbers of the main setting; `just report sweep` for all settings
 just figures    # Figures 1 and 2 and the figure of File S2, from the saved runs
-just all        # everything from scratch: tuning, all 14 settings x 20 runs, report and
-                # figures (about an hour with 3 processes)
+just all        # whatever is missing: tuning, runs, then the report and figures
+just fresh      # everything from scratch into outputs_fresh/ (about an hour with 3
+                # processes); compare it with outputs/ to check the saved results
 ```
 
 `just run SETTING` runs a single setting; finished runs are skipped, so an interrupted
-job resumes where it stopped. To recompute runs that already exist, move
-`outputs/runs/` away first, or set `STUDY_OUTPUTS` to another folder.
+job resumes where it stopped. Because the saved results are in `outputs/`, `just all`
+recomputes nothing on a fresh copy; use `just fresh` to recompute everything.
 
 ## Reproducibility
 
 - Every random draw comes from a fixed seed. Tuning uses seeds 0 to 3, one per step
   (`tune.py`). Run r of every setting uses seed r, and draws in a fixed order: the
-  gatherings, a random half of the people, the sensor record, then the spreading
-  processes of each world in turn (`run.py`).
+  gatherings, a random subset of about half the people, the sensor record, then the
+  spreading processes of each world in turn (`run.py`).
 - With the library versions in `uv.lock` (numpy 2.5.4, scipy 1.18.1, matplotlib 3.11.2,
   Python 3.15) on the machine that made them (Apple M-series, macOS), the code gives
   exactly the saved results. On other processors the fits stop at slightly different
   points: parameters differ by about one part in 10,000, and rates fitted as zero (at
-  the lower bound, about 1e-17 per second) can come out as another value near zero.
-  `just verify` says which case applies, and fails unless every winner and every
+  the lower bound, exp(-40), about 4e-18 per second) can come out as another value near
+  zero. `just verify` says which case applies, and fails unless every winner and every
   predicted effect of the paper is the same (effects to within 0.1 percentage points).
   Other versions of numpy can change the random streams.
 - Each run file stores a hash of the tuning file that it was made from, and the report

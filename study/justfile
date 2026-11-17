@@ -1,6 +1,9 @@
-# The simulated benchmark. Results go to outputs/ (or $STUDY_OUTPUTS).
-# `just all` recomputes everything from scratch; `just verify` checks a few runs against
-# the saved results in a few minutes.
+# The simulated benchmark. Results go to outputs/, or to the folder in $STUDY_OUTPUTS.
+# The saved results are in outputs/, so `just all` recomputes only what is missing.
+# `just fresh` recomputes everything into a new folder; `just verify` checks a few runs
+# against the saved results in about a minute.
+
+out := env_var_or_default("STUDY_OUTPUTS", "outputs")
 
 # List the recipes
 default:
@@ -21,7 +24,7 @@ run setting="main" jobs="3":
 # Tune every number of people met per day in the sweep, then run all 14 settings
 sweep jobs="3":
     for x in 6.0 3.0 10.0 25.0; do \
-        test -f outputs/tuned/people_met_per_day=$x.json || just tune $x; \
+        test -f {{out}}/tuned/people_met_per_day=$x.json || just tune $x; \
     done
     uv run python run.py sweep {{jobs}}
 
@@ -34,9 +37,13 @@ figures:
     uv run python design_figure.py
     uv run python figures.py main
 
-# Recompute a few runs and check that they match the saved results exactly
+# Recompute the tuning and three runs, and check them against the saved results
 verify:
     nice -n 20 uv run python verify.py
 
-# Everything from scratch: tests, tuning, all runs, report and figures (about an hour)
+# Tests, then the tuning and runs that are missing, the report and the figures
 all jobs="3": test (sweep jobs) (report "sweep") figures
+
+# Everything from scratch into outputs_fresh/ (about an hour with 3 processes)
+fresh jobs="3":
+    STUDY_OUTPUTS=outputs_fresh just all {{jobs}}
