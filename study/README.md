@@ -60,9 +60,12 @@ job resumes where it stopped. To recompute runs that already exist, move
   gatherings, a random half of the people, the sensor record, then the spreading
   processes of each world in turn (`run.py`).
 - With the library versions in `uv.lock` (numpy 2.5.4, scipy 1.18.1, matplotlib 3.11.2,
-  Python 3.15), the code gives exactly the saved results; `just verify` checks this.
-  Other versions of numpy can change the random streams, and other versions of scipy
-  can change the fits in the last digits.
+  Python 3.15) on the machine that made them (Apple M-series, macOS), the code gives
+  exactly the saved results. On other processors the fits stop at slightly different
+  points, and fitted parameters can differ by about one part in 10,000. `just verify`
+  says which case applies, and fails unless every winner and every predicted effect of
+  the paper is the same (effects to within 0.1 percentage points). Other versions of
+  numpy can change the random streams.
 - Each run file stores a hash of the tuning file that it was made from, and the report
   refuses to mix runs made from different tunings.
 

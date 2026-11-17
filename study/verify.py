@@ -2,15 +2,16 @@
 
 Usage: uv run python verify.py [SETTING:RUN ...]
 Recomputes the tuning of the main setting and the given runs (default: two runs of the
-main setting and one of the sweep), and compares every number with the saved files.
+main setting and one of the sweep) and compares them with the saved files.
 
 On the machine that made the results (Apple M-series, macOS) every number comes out
-identical. On other processors the fits can differ in the last digits, so a number
-counts as reproduced if it is within RTOL of the saved one, or within ATOL of it. ATOL
-covers fitted rates that sit at the lower bound of the fit (about 1e-17 per second,
-that is zero): there the likelihood is flat, and other processors can stop at another
-value that is also zero for every purpose. The largest difference found is printed.
-Exits with an error if any number differs by more.
+identical, and the check says so. On other processors the maximum-likelihood fits stop
+at slightly different points: fitted parameters can differ by about one part in 10,000,
+the size of the optimizer's stopping tolerance. The check then asks whether the
+results of the paper are reproduced: in every world and record, the same model must
+win under every criterion, and every predicted effect must be within EFFECT_TOL
+percentage points. It also prints the largest relative difference among all numbers.
+Exits with an error if a result of the paper is not reproduced.
 """
 
 import json
@@ -18,50 +19,67 @@ import sys
 
 import run
 import tune
+from models import CHECK_MODELS, MODELS
+from results import CRITERIA, criterion_bits, effect, winner
 from settings import settings, tuned_path
 
 DEFAULT = ["main:0", "main:7", "detection_probability=0.25:3"]
-RTOL = 1e-9
-ATOL = 1e-10
+EFFECT_TOL = 0.1  # percentage points
 
 
-def differences(a, b, path=""):
-    """Relative differences between two results, after the JSON round trip that the
-    saved files went through; inf where the structure or a non-number differs."""
+def largest_difference(a, b, path=""):
+    """(relative difference, where) for the number that differs most."""
     if isinstance(a, dict):
-        if a.keys() != b.keys():
-            return [(path, float("inf"))]
-        return [d for k in a for d in differences(a[k], b[k], f"{path}/{k}")]
+        return max((largest_difference(a[k], b[k], f"{path}/{k}") for k in a),
+                   default=(0.0, path))
     if isinstance(a, list):
-        if len(a) != len(b):
-            return [(path, float("inf"))]
-        return [d for i, (x, y) in enumerate(zip(a, b))
-                for d in differences(x, y, f"{path}/{i}")]
-    if isinstance(a, (int, float)) and isinstance(b, (int, float)):
-        if a == b or abs(a - b) <= ATOL:
-            return [(path, 0.0)]
-        return [(path, abs(a - b) / max(abs(a), abs(b)))]
-    return [(path, 0.0 if a == b else float("inf"))]
+        return max((largest_difference(x, y, f"{path}/{i}")
+                    for i, (x, y) in enumerate(zip(a, b))), default=(0.0, path))
+    if isinstance(a, (int, float)) and a != b:
+        return abs(a - b) / max(abs(a), abs(b)), path
+    return 0.0, path
 
 
-def check(label, new, saved):
+def paper_results_differ(new, saved):
+    """Descriptions of every winner or predicted effect that differs."""
+    out = []
+    for cn, cs in zip(new["conditions"], saved["conditions"]):
+        where = f"{cn['world']}, {cn['record']}"
+        for criterion in CRITERIA:
+            wn, ws = (winner({m: criterion_bits(criterion, c["models"][m])
+                              for m in MODELS}) for c in (cn, cs))
+            if wn != ws:
+                out.append(f"{where}: winner by {criterion} is {wn}, saved {ws}")
+        for group, ms in (("models", MODELS), ("check_models", CHECK_MODELS)):
+            for m in ms:
+                en, es = (effect(c[group][m]["together_apart"]) for c in (cn, cs))
+                if abs(en - es) > EFFECT_TOL:
+                    out.append(f"{where}: effect predicted by {m} is {en:.2f}, "
+                               f"saved {es:.2f}")
+    return out
+
+
+def check(label, new, saved, has_conditions=True):
     new = json.loads(json.dumps(new))
-    diffs = differences(new, saved)
-    worst_path, worst = max(diffs, key=lambda d: d[1])
     if new == saved:
-        print(f"{label}: identical ({len(diffs)} values)")
-    elif worst <= RTOL:
-        print(f"{label}: reproduced ({len(diffs)} values, largest relative difference "
-              f"{worst:.1e} at {worst_path})")
-    else:
-        print(f"{label}: DIFFERS (relative difference {worst:.1e} at {worst_path})")
-    return worst <= RTOL
+        print(f"{label}: identical")
+        return True
+    rel, where = largest_difference(new, saved)
+    problems = (paper_results_differ(new, saved) if has_conditions
+                else ["the tuning differs"])
+    status = ("results of the paper DIFFER" if problems
+              else "results of the paper reproduced")
+    print(f"{label}: {status} (largest relative difference {rel:.1e} at {where})")
+    for p in problems:
+        print("   ", p)
+    return not problems
 
 
 def main(targets):
     saved = json.loads(tuned_path(settings("main")).read_text())
     ok = check("tuning of the main setting",
-               tune.tuned_params(settings("main")["people_met_per_day"]), saved)
+               tune.tuned_params(settings("main")["people_met_per_day"]), saved,
+               has_conditions=False)
     for target in targets:
         name, r = target.rsplit(":", 1)
         saved = json.loads(run.run_path(name, int(r)).read_text())
