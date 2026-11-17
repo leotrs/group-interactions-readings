@@ -117,10 +117,11 @@ SHOWN = {
     "people_met_per_day": ("people met a day", lambda v: f"{v:g}"),
     "detection_probability": ("sensor detection probability", lambda v: f"{v:g}"),
     "sampling_interval": ("sensor sampling interval", lambda v: f"{v:g} s"),
-    "adoption_delay": ("delay in recorded adoption times", lambda v: f"{v / 60:g} min"),
+    "adoption_delay": ("mean delay in recorded adoption times",
+                       lambda v: f"{v / 60:g} min"),
     "processes_fitted": ("spreading processes fitted", lambda v: f"{v}"),
-    "sensor_groups": ("sensor groups", lambda v: {"components": "connected pairs",
-                                                  "gatherings": "true gatherings"}[v]),
+    "sensor_groups": ("sensor groups", lambda v: {"components": "components",
+                                                  "gatherings": "per gathering"}[v]),
 }
 
 
@@ -202,7 +203,7 @@ def settings_panel(ax, t):
     for k, vs in SWEEP.items():
         name, show = SHOWN[k]
         rows.append(("row", name, show(MAIN[k]), ", ".join(show(v) for v in vs)))
-    cols = (0.0, 0.50, 0.78)
+    cols = (0.0, 0.58, 0.79)
     step = 1 / len(rows)
     y = 1 - step / 2
     rule = {"color": t["muted"], "lw": 2.0, "transform": ax.transAxes, "clip_on": False}

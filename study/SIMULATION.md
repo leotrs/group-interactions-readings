@@ -100,11 +100,13 @@ seconds unless stated. The code that implements each part is named in brackets.
 - A person who has not adopted meets two adopters either together, in one gathering of
   15 minutes, or one at a time, in two gatherings of 15 minutes each. The effect is the
   chance of adopting together minus the chance one at a time.
-- True chances from the world's rule, with r(k) the rate above: together
-  `1 - exp(-r(2) * 900)`, one at a time `1 - exp(-2 * r(1) * 900)`.
-- Predicted chances from each fitted model, without the background rate b: together
-  `1 - exp(-lam * 2^nu * 900)`, one at a time `1 - exp(-2 * lam * 900)`, with nu = 1 for
-  the linear graph model. These are the same for a record of either kind.
+- True chances from the world's rule, with r(k) the rate above:
+  - together: `1 - exp(-r(2) * 900)`;
+  - one at a time: `1 - exp(-2 * r(1) * 900)`.
+- Predicted chances from each fitted model, without the background rate b, with nu = 1
+  for the linear graph model (the same for a record of either kind):
+  - together: `1 - exp(-lam * 2^nu * 900)`;
+  - one at a time: `1 - exp(-2 * lam * 900)`.
 - Reported: the median over runs, with the interquartile range.
 
 ## Settings [settings.py, records.py, run.py, tune.py]
@@ -129,7 +131,7 @@ has 20 runs, with run seeds 0 to 19.
   first sample to the end of its last. The second uses the true gathering times, which
   real sensors do not record, and serves only as a check.
 
-## Model with a group rate, for the causal effect only [models.py, run.py]
+## Model with a group rate [models.py, run.py]
 
 - The rate is `lam * a_i + mu * g + b`, with g the number of the person's current
   recorded groups that hold at least two adopters, and a_i as in "Models and fitting".
@@ -138,9 +140,10 @@ has 20 runs, with run seeds 0 to 19.
 - Fitted by maximum likelihood to the first process, like the other models, over the
   natural logarithms of lam, b and mu (each bounded to [-40, 5]) from 27 starting
   points.
-- It takes no part in the comparisons of Figure 2A and 2B. Its predicted effect uses
-  together `1 - exp(-(2 * lam + mu) * 900)` and one at a time
-  `1 - exp(-2 * lam * 900)`, without b. Figure 2C shows it as hollow diamonds.
+- It takes no part in the comparisons of Figure 2A and 2B. Figure 2C shows its
+  predicted effect as hollow diamonds, computed without b:
+  - together: `1 - exp(-(2 * lam + mu) * 900)`;
+  - one at a time: `1 - exp(-2 * lam * 900)`.
 - Main setting, 20 runs: median predicted effect 63.5 points on the log and 56.4 on the
   sensors in the group world, 31.2 and 30.3 in the mixed world, and 0.0 and 10.1 in the
   pairwise world. On the sensors in the pairwise world, its held-out misfit is lower than

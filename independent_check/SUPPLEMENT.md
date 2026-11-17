@@ -1,16 +1,17 @@
 # Supplementary File S3: models with a separate rate for two or more adopters
 
 None of the three models in the main text can represent a rate that is zero with one
-adopter present and positive with two. This supplement fits two models that can, in the
-main setting (File S1), with 20 runs (seeds 0 to 19).
+adopter present and positive with two. This supplement fits two models that can. It uses
+the main setting (File S1) and its own 20 runs, drawn by separate code.
 
 ## Models
 
 For a person who has not adopted, with a_i adopters in contact now and a_e adopters in
 each of the person's current recorded groups e:
 
-- graph form: rate = lam * a_i + mu * [a_i >= 2] + b;
-- group form: rate = lam * a_i + mu * (number of groups e with a_e >= 2) + b.
+- graph form: rate = lam * a_i + mu * h + b, with h = 1 when a_i >= 2 and 0 otherwise;
+- group form: rate = lam * a_i + mu * g + b, with g the number of groups e with
+  a_e >= 2.
 
 On the meeting log a person is in one gathering at a time, so the two forms are the same
 model. Fitting, held-out misfit and the causal effect follow File S1: maximum likelihood
@@ -53,7 +54,7 @@ ties occurred).
 | group | 20 | 18 | 20 |
 | mixed | 18 | 14 | 20 |
 
-On the sensors in the pairwise world, the group form has the lower held-out misfit in 19
-of 20 runs (median difference 26 bits) and predicts an effect of 11 points where there
+On the sensors in the pairwise world, the group form has a lower held-out misfit than
+the nonlinear graph model in 19 of its 20 runs (median difference 26 bits) and predicts an effect of 11 points where there
 is none. The sensors miss pairs through which spreading happens, so the recorded
 contacts are not the routes of spreading.

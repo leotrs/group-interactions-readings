@@ -30,9 +30,9 @@
   message length depends on how the contacts were recorded, not on how the behavior
   spreads. When adoption depends on groups, models fitted to the meeting log
   underestimate how much meeting adopters together, rather than one at a time, raises
-  the chance of adopting. A model with a separate rate for recorded groups of two or
-  more adopters corrects this on the meeting log, but on the sensors it reports a group
-  effect where there is none and beats both graph models on held-out data. Authors
+  the chance of adopting. A model with a separate rate for recorded groups that hold two
+  or more adopters corrects this on the meeting log, but on the sensors it reports a
+  group effect where there is none and beats both graph models on held-out data. Authors
   should say which reading they intend, report the bits for the recorded structure
   separately, and test or state the causal assumptions behind any claim about the
   system.
@@ -70,8 +70,8 @@ message-length verdict, graph or hypergraph, changes with how the contacts were 
 and not with the mechanism of spreading. When adoption depends on groups, models fitted
 to a complete record of the contacts underestimate how much meeting adopters together,
 rather than one at a time, raises the chance of adopting. A model with a separate rate
-for recorded groups of two or more adopters corrects this, but when the contacts are
-recorded by proximity sensors that miss some of them, it reports a group effect in a
+for recorded groups that hold two or more adopters corrects this, but when the contacts
+are recorded by proximity sensors that miss some of them, it reports a group effect in a
 world without one and beats both graph models on held-out data.
 
 ## Three readings of the claim {
@@ -128,23 +128,22 @@ instance if a person met two adopters together rather than one at a time, is a c
 question, outside the comparison :cite:hernan2019::.
 
 Read as causation, the claim concerns what would happen if the system were changed. From
-recorded data, a fitted model answers such a question correctly only under several
+recorded data, a fitted model answers such a question correctly only under three
 assumptions, two of which cannot be confirmed from the data: :span:{:label:
 asm-untestable} that the recorded contacts are the routes of spreading, and that who
 meets whom does not depend on adoption or its causes::
 :cite:pearl2009overview,shalizi2011::. A third is given in :ref:sec-recommendations::.
 
-For the second reading, model selection is the right tool at our disposal, and for data
-recorded without changing the system it is the only tool available. We argue for adding
-to it: test the causal reading by changing the system when possible and ethical, and
-otherwise state the causal assumptions on which every causal reading of recorded data
-rests :cite:pearl2009overview::. Stating them is one way to express in causal terms what
+For the second reading, model selection is the right tool, and for data recorded without
+changing the system it is the only tool available. We argue for adding to it: test the
+causal reading by changing the system when possible and ethical, and otherwise state the
+causal assumptions on which every causal reading of recorded data rests
+:cite:pearl2009overview::. Stating them is one way to express in causal terms what
 :cite:perezreche2026:: calls reducibility: whether a higher-order model can be replaced
 by a lower-order one.
 
-In :ref:sec-study::, we test the argument in a benchmark of the kind that
-:cite:rommens2026:: propose, in which the mechanism is known, and examine its results
-under each of the three readings.
+In :ref:sec-study::, we test the argument in such a benchmark, in which the mechanism is
+known, and examine the results under each of the three readings.
 
 ## A simulated benchmark {
   :label: sec-study
@@ -162,17 +161,17 @@ Spreading is built in three ways, which we call worlds (:ref:fig-design::A). In 
 pairwise world, each adopter in a person's gathering converts that person at a constant
 rate. In the group world, a person adopts at a constant rate while at least two adopters
 are present, and never with only one. The mixed world has both mechanisms at half
-strength. Between half and 60\% of the people adopt, depending on the world.
+strength. Between 49\% and 61\% of the people adopt, depending on the world.
 
 **Records.** A run simulates the gatherings and two independent spreading processes of
 the same world over them. Each run is recorded in two ways, and we call each recording a
 record (:ref:fig-design::B). A meeting log lists every gathering with its members, start
 and end. Proximity sensors sample every 20 seconds and detect each pair in a gathering
-with probability one half, close to the share of interaction time, about half, that
-radio-frequency badges detected in a field test against video recordings
-:cite:elmer2019::. At each sample, the recorded groups are the connected components of
-the graph of detected pairs. In both records, each person is in at most one recorded
-group at a time, and the adoption times are included.
+with probability one half, about the share of interaction time that radio-frequency
+badges detected in a field test against video recordings :cite:elmer2019::. At each
+sample, the recorded groups are the connected components of the graph of detected pairs.
+In both records, each person is in at most one recorded group at a time, and the
+adoption times are included.
 
 **Models and scores.** Three models give each person who has not adopted a rate of
 adoption that depends on the contacts recorded at that moment, plus a constant
@@ -203,9 +202,9 @@ File S1 gives the full specification of the study.
   :caption: Design of the simulated study. (A) Adoption rate in each world. (B) One
   gathering as recorded by the meeting log and by the sensors at one sample. (C) Rate
   given by each model to a person whose sensor group holds two adopters, only one of
-  them detected with the person, with rate λ = 1 per adopter and fitted power ν = 2. (D)
-  Parts of the two scores. (E) Hyperparameters: the main setting and the values tried
-  one at a time.
+  them detected with the person, with rate λ = 1 per adopter and power ν = 2. (D) Parts
+  of the two scores. (E) Hyperparameters: the main setting and the values tried one at a
+  time.
 
 ::
 
@@ -258,11 +257,11 @@ other two worlds. On the sensor record, the hypergraph model wins every run in a
 worlds, because its groups include pairs that the sensors missed.
 
 **Causation.** On the meeting log, :ref:asm-untestable,the two assumptions:: that cannot
-be confirmed from the data hold by construction: the recorded contacts are the only
-routes of spreading, and who meets whom does not depend on adoption. In the group and
-mixed worlds, the fitted models still give the wrong answer to the causal question: how
-a person's chance of adoption changes when the person meets two adopters together rather
-than one at a time (:ref:fig-wins::C). In the group world, a person who meets two
+be confirmed from the data hold by construction: the recorded contacts are the routes of
+spreading, and who meets whom does not depend on adoption or its causes. In the group
+and mixed worlds, the fitted models still give the wrong answer to the causal question:
+how a person's chance of adoption changes when the person meets two adopters together
+rather than one at a time (:ref:fig-wins::C). In the group world, a person who meets two
 adopters together for 15 minutes has a 63\% chance of adopting, and one who meets them
 one at a time, each for 15 minutes, never adopts, so the true effect is 63 percentage
 points. Fitted to the meeting log, the nonlinear graph model and the hypergraph model
@@ -276,11 +275,11 @@ medians over runs.
 **Causation: wider rules.** None of the three models can represent a rate that is zero
 with one adopter present and positive with two, so we also fitted the linear graph model
 with an added rate for each of the person's recorded groups that holds at least two
-adopters (:ref:fig-wins::C, Supplementary File S3). On the meeting log, this model
-recovers the effect: a median of 63 points in the group world and 31 in the mixed world.
-On the sensors, it predicts an effect of 10 points in the pairwise world, where there is
-none, and has a lower held-out misfit than both graph models in 20 of 20 runs, though
-not than the hypergraph model.
+adopters (:ref:fig-wins::C, Supplementary File S1). On the meeting log, this model comes
+close to the true effect: a median of 63.5 points in the group world (true 63.2) and 31
+in the mixed world (true 35). On the sensors, it predicts an effect of 10 points in the
+pairwise world, where there is none, and has a lower held-out misfit than both graph
+models in 20 of 20 runs, but a higher one than the hypergraph model in every run.
 
 ## Discussion {
   :label: sec-recommendations
@@ -331,18 +330,19 @@ include the true form of the response. The first two cannot be confirmed from th
 :cite:pearl2009overview,shalizi2011::. In our simulation, both held for the meeting log,
 but the third failed where adoption depends on groups, and the fitted models
 underestimated the effect of meeting together about fourfold or more. A model with a
-separate rate for recorded groups of two or more adopters recovered the effect. On the
-sensors, where the recorded contacts miss some routes of spreading, the same model
-reported a group effect in the pairwise world and beat both graph models on held-out
-data. A model that beats its rivals on held-out data can therefore still give the wrong
-causal answer, and one cannot tell from the record whether it does. Where the system
-cannot be changed, authors should state the three assumptions and probe the third by
-widening the set of rules compared.
+separate rate for recorded groups that hold two or more adopters came close to the
+effect. On the sensors, where the recorded contacts miss some routes of spreading, the
+same model reported a group effect in the pairwise world and beat both graph models on
+held-out data, while in the group world the held-out winner predicted 14 points against
+63. A better held-out score is therefore no sign of a better causal answer, and the
+record alone does not show which model gives it. Where the system cannot be changed,
+authors should state the three assumptions and probe the third by widening the set of
+rules compared.
 
 Two questions remain open: how to build criteria whose verdict changes with the
 mechanism rather than with the record, and whether recorded data can contain enough
-natural variation in whether people meet together or one at a time to approximate the
-intervention above without running it.
+natural variation to approximate the together-or-one-at-a-time intervention without
+running it.
 
 ## Statements {
   :label: sec-statements
@@ -353,8 +353,8 @@ intervention above without running it.
 available at https://github.com/leotrs/group-interactions-readings.
 
 **Supplementary material.** File S1 specifies the simulated study in full, File S2
-compares three ways of holding out data, and File S3 gives the models with a separate
-rate for two or more adopters.
+compares three ways of holding out data, and File S3 checks the model with a separate
+rate for two or more adopters in independent code.
 
 **Funding.** The author received no specific funding for this work.
 
