@@ -43,8 +43,9 @@ just supplement  # Supplementary Files S1 to S3 as PDFs (needs pandoc and xelate
 
 Every random draw comes from a fixed seed, so the code gives the saved results exactly
 with the locked library versions on the machine that made them (Apple M-series,
-macOS). On other processors the fits stop at slightly different points (fitted
-parameters differ by about one part in 10,000), and `just verify` checks that every
+macOS). On other processors the fits stop at slightly different points (parameters
+differ by about one part in 10,000, and rates fitted as zero come out as other values
+near zero), and `just verify` checks that every
 winner and every predicted effect of the paper is still the same. The tests and the
 check run on every push, on Linux (`.github/workflows/tests.yml`).
 

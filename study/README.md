@@ -42,7 +42,7 @@ exact library versions in `uv.lock` on first use.
 
 ```
 just test       # unit tests (about 10 s)
-just verify     # recompute the tuning and three runs, check them against the saved files
+just verify     # recompute the tuning and three runs; compare with the saved results
 just report     # the numbers of the main setting; `just report sweep` for all settings
 just figures    # Figures 1 and 2 and the figure of File S2, from the saved runs
 just all        # everything from scratch: tuning, all 14 settings x 20 runs, report and
@@ -62,10 +62,11 @@ job resumes where it stopped. To recompute runs that already exist, move
 - With the library versions in `uv.lock` (numpy 2.5.4, scipy 1.18.1, matplotlib 3.11.2,
   Python 3.15) on the machine that made them (Apple M-series, macOS), the code gives
   exactly the saved results. On other processors the fits stop at slightly different
-  points, and fitted parameters can differ by about one part in 10,000. `just verify`
-  says which case applies, and fails unless every winner and every predicted effect of
-  the paper is the same (effects to within 0.1 percentage points). Other versions of
-  numpy can change the random streams.
+  points: parameters differ by about one part in 10,000, and rates fitted as zero (at
+  the lower bound, about 1e-17 per second) can come out as another value near zero.
+  `just verify` says which case applies, and fails unless every winner and every
+  predicted effect of the paper is the same (effects to within 0.1 percentage points).
+  Other versions of numpy can change the random streams.
 - Each run file stores a hash of the tuning file that it was made from, and the report
   refuses to mix runs made from different tunings.
 
