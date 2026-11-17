@@ -6,8 +6,11 @@ main setting and one of the sweep), and compares every number with the saved fil
 
 On the machine that made the results (Apple M-series, macOS) every number comes out
 identical. On other processors the fits can differ in the last digits, so a number
-counts as reproduced if it is within RTOL of the saved one; the largest difference
-found is printed. Exits with an error if any number differs by more.
+counts as reproduced if it is within RTOL of the saved one, or within ATOL of it. ATOL
+covers fitted rates that sit at the lower bound of the fit (about 1e-17 per second,
+that is zero): there the likelihood is flat, and other processors can stop at another
+value that is also zero for every purpose. The largest difference found is printed.
+Exits with an error if any number differs by more.
 """
 
 import json
@@ -19,6 +22,7 @@ from settings import settings, tuned_path
 
 DEFAULT = ["main:0", "main:7", "detection_probability=0.25:3"]
 RTOL = 1e-9
+ATOL = 1e-10
 
 
 def differences(a, b, path=""):
@@ -34,16 +38,17 @@ def differences(a, b, path=""):
         return [d for i, (x, y) in enumerate(zip(a, b))
                 for d in differences(x, y, f"{path}/{i}")]
     if isinstance(a, (int, float)) and isinstance(b, (int, float)):
-        if a == b:
+        if a == b or abs(a - b) <= ATOL:
             return [(path, 0.0)]
         return [(path, abs(a - b) / max(abs(a), abs(b)))]
     return [(path, 0.0 if a == b else float("inf"))]
 
 
 def check(label, new, saved):
-    diffs = differences(json.loads(json.dumps(new)), saved)
+    new = json.loads(json.dumps(new))
+    diffs = differences(new, saved)
     worst_path, worst = max(diffs, key=lambda d: d[1])
-    if worst == 0:
+    if new == saved:
         print(f"{label}: identical ({len(diffs)} values)")
     elif worst <= RTOL:
         print(f"{label}: reproduced ({len(diffs)} values, largest relative difference "
