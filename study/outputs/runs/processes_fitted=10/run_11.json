@@ -1,0 +1,500 @@
+{
+ "run": 11,
+ "tuned": "16cda7f3261957ce",
+ "settings": {
+  "people_met_per_day": 6.0,
+  "detection_probability": 0.5,
+  "sampling_interval": 20.0,
+  "adoption_delay": 0.0,
+  "processes_fitted": 10,
+  "sensor_groups": "components"
+ },
+ "conditions": [
+  {
+   "world": "pairwise",
+   "record": "log",
+   "adopted": 0.441,
+   "n_pairs": 1662,
+   "n_groups": 240,
+   "true": {
+    "together": 0.20882565321683788,
+    "apart": 0.20882565321683788
+   },
+   "models": {
+    "graph_linear": {
+     "structure_bits": 8255.301818626636,
+     "structure_bits_cliques": 5834.870882572057,
+     "rule_bits": 9.326429487122303,
+     "fitted_message_bits": 16874.601353736376,
+     "heldout_misfit_bits": 9438.192643425602,
+     "split_by_people_misfit_bits": 4464.086783292306,
+     "split_in_time_misfit_bits": 4247.848352966399,
+     "params": [
+      0.00012835725336460442,
+      1.4997785307232052e-16,
+      1.0
+     ],
+     "together_apart": {
+      "together": 0.20629470852016873,
+      "apart": 0.20629470852016873
+     }
+    },
+    "graph_nonlinear": {
+     "structure_bits": 8255.301818626636,
+     "structure_bits_cliques": 5834.870882572057,
+     "rule_bits": 13.989644230683453,
+     "fitted_message_bits": 16878.292757215877,
+     "heldout_misfit_bits": 9441.639843867772,
+     "split_by_people_misfit_bits": 4463.447255608344,
+     "split_in_time_misfit_bits": 4247.325065304147,
+     "params": [
+      0.00012094155478220248,
+      8.636004449192311e-18,
+      1.0911093139579675
+     ],
+     "together_apart": {
+      "together": 0.20696354335224387,
+      "apart": 0.19562910067416817
+     }
+    },
+    "hypergraph": {
+     "structure_bits": 5367.836707056508,
+     "structure_bits_cliques": 5367.836707056508,
+     "rule_bits": 13.989644230683453,
+     "fitted_message_bits": 13990.82764564575,
+     "heldout_misfit_bits": 9441.639843867772,
+     "split_by_people_misfit_bits": 4463.447255608344,
+     "split_in_time_misfit_bits": 4247.325065304147,
+     "params": [
+      0.00012094155478220248,
+      8.636004449192311e-18,
+      1.0911093139579675
+     ],
+     "together_apart": {
+      "together": 0.20696354335224387,
+      "apart": 0.19562910067416817
+     }
+    }
+   },
+   "check_models": {
+    "group_rate": {
+     "heldout_misfit_bits": 9438.228713383087,
+     "params": [
+      0.00012800395341458297,
+      4.248354255291589e-18,
+      1.2807096450689839e-06
+     ],
+     "together_apart": {
+      "together": 0.20670470913590555,
+      "apart": 0.2057897991195048
+     }
+    }
+   }
+  },
+  {
+   "world": "pairwise",
+   "record": "sensors",
+   "adopted": 0.441,
+   "n_pairs": 1603,
+   "n_groups": 1368,
+   "true": {
+    "together": 0.20882565321683788,
+    "apart": 0.20882565321683788
+   },
+   "models": {
+    "graph_linear": {
+     "structure_bits": 8049.757628920262,
+     "structure_bits_cliques": 5944.764786537335,
+     "rule_bits": 9.326429487122303,
+     "fitted_message_bits": 18002.9759976523,
+     "heldout_misfit_bits": 10780.893466396843,
+     "split_by_people_misfit_bits": 5102.151987834769,
+     "split_in_time_misfit_bits": 4887.679789788715,
+     "params": [
+      0.0001827754319149312,
+      1.4660860377661522e-06,
+      1.0
+     ],
+     "together_apart": {
+      "together": 0.28035394451564055,
+      "apart": 0.28035394451564055
+     }
+    },
+    "graph_nonlinear": {
+     "structure_bits": 8049.757628920262,
+     "structure_bits_cliques": 5944.764786537335,
+     "rule_bits": 13.989644230683453,
+     "fitted_message_bits": 18007.169286827273,
+     "heldout_misfit_bits": 10777.061514617724,
+     "split_by_people_misfit_bits": 5103.473795182613,
+     "split_in_time_misfit_bits": 4890.860901751268,
+     "params": [
+      0.00018855683083753206,
+      1.46578291834058e-06,
+      0.910689198125796
+     ],
+     "together_apart": {
+      "together": 0.27314520002305664,
+      "apart": 0.2878041217523446
+     }
+    },
+    "hypergraph": {
+     "structure_bits": 19870.75173432793,
+     "structure_bits_cliques": 19870.75173432793,
+     "rule_bits": 13.989644230683453,
+     "fitted_message_bits": 29175.151372595144,
+     "heldout_misfit_bits": 10227.505667166984,
+     "split_by_people_misfit_bits": 4776.158205238323,
+     "split_in_time_misfit_bits": 4575.573351663549,
+     "params": [
+      0.0001275192280806235,
+      6.600888208145739e-07,
+      1.0723360768310177
+     ],
+     "together_apart": {
+      "together": 0.2144229826955093,
+      "apart": 0.20509654388020393
+     }
+    }
+   },
+   "check_models": {
+    "group_rate": {
+     "heldout_misfit_bits": 10542.390445520186,
+     "params": [
+      0.00011357021610553596,
+      1.1319431045024536e-06,
+      0.00019239614096339813
+     ],
+     "together_apart": {
+      "together": 0.3144836409486619,
+      "apart": 0.18488525887143048
+     }
+    }
+   }
+  },
+  {
+   "world": "group",
+   "record": "log",
+   "adopted": 0.4494999999999999,
+   "n_pairs": 1662,
+   "n_groups": 240,
+   "true": {
+    "together": 0.6321205588285577,
+    "apart": 0.0
+   },
+   "models": {
+    "graph_linear": {
+     "structure_bits": 8255.301818626636,
+     "structure_bits_cliques": 5834.870882572057,
+     "rule_bits": 9.364134655008051,
+     "fitted_message_bits": 16533.587785030504,
+     "heldout_misfit_bits": 9153.395647765454,
+     "split_by_people_misfit_bits": 4167.76466679826,
+     "split_in_time_misfit_bits": 4023.636062875074,
+     "params": [
+      0.00016478115210003883,
+      2.3086000556726594e-15,
+      1.0
+     ],
+     "together_apart": {
+      "together": 0.2566632254594654,
+      "apart": 0.2566632254594654
+     }
+    },
+    "graph_nonlinear": {
+     "structure_bits": 8255.301818626636,
+     "structure_bits_cliques": 5834.870882572057,
+     "rule_bits": 14.046201982512077,
+     "fitted_message_bits": 16207.206160043545,
+     "heldout_misfit_bits": 8822.304089886253,
+     "split_by_people_misfit_bits": 3996.8920879702027,
+     "split_in_time_misfit_bits": 3881.5592766897535,
+     "params": [
+      5.440011509452142e-05,
+      4.248354255291589e-18,
+      2.437067073052646
+     ],
+     "together_apart": {
+      "together": 0.23290021800614158,
+      "apart": 0.0932787492780115
+     }
+    },
+    "hypergraph": {
+     "structure_bits": 5367.836707056508,
+     "structure_bits_cliques": 5367.836707056508,
+     "rule_bits": 14.046201982512077,
+     "fitted_message_bits": 13319.741048473416,
+     "heldout_misfit_bits": 8822.304089886253,
+     "split_by_people_misfit_bits": 3996.8920879702027,
+     "split_in_time_misfit_bits": 3881.5592766897535,
+     "params": [
+      5.440011509452142e-05,
+      4.248354255291589e-18,
+      2.437067073052646
+     ],
+     "together_apart": {
+      "together": 0.23290021800614158,
+      "apart": 0.0932787492780115
+     }
+    }
+   },
+   "check_models": {
+    "group_rate": {
+     "heldout_misfit_bits": 8335.270155107874,
+     "params": [
+      6.693579584002707e-13,
+      9.05406104583817e-15,
+      0.0010336514539395689
+     ],
+     "together_apart": {
+      "together": 0.6055592380328707,
+      "apart": 1.2048443354117921e-09
+     }
+    }
+   }
+  },
+  {
+   "world": "group",
+   "record": "sensors",
+   "adopted": 0.4494999999999999,
+   "n_pairs": 1603,
+   "n_groups": 1368,
+   "true": {
+    "together": 0.6321205588285577,
+    "apart": 0.0
+   },
+   "models": {
+    "graph_linear": {
+     "structure_bits": 8049.757628920262,
+     "structure_bits_cliques": 5944.764786537335,
+     "rule_bits": 9.364134655008051,
+     "fitted_message_bits": 17520.307644357243,
+     "heldout_misfit_bits": 10482.05448549894,
+     "split_by_people_misfit_bits": 4786.500652310334,
+     "split_in_time_misfit_bits": 4645.6257785913085,
+     "params": [
+      0.00026833709537451043,
+      9.875861913534995e-07,
+      1.0
+     ],
+     "together_apart": {
+      "together": 0.3830743542600258,
+      "apart": 0.3830743542600258
+     }
+    },
+    "graph_nonlinear": {
+     "structure_bits": 8049.757628920262,
+     "structure_bits_cliques": 5944.764786537335,
+     "rule_bits": 14.046201982512077,
+     "fitted_message_bits": 17494.426031819,
+     "heldout_misfit_bits": 10441.114484404092,
+     "split_by_people_misfit_bits": 4767.341075241267,
+     "split_in_time_misfit_bits": 4628.154985459445,
+     "params": [
+      0.0002170313892902862,
+      9.885193645249121e-07,
+      1.5959439865594407
+     ],
+     "together_apart": {
+      "together": 0.44592884424978607,
+      "apart": 0.32338746795759654
+     }
+    },
+    "hypergraph": {
+     "structure_bits": 19870.75173432793,
+     "structure_bits_cliques": 19870.75173432793,
+     "rule_bits": 14.046201982512077,
+     "fitted_message_bits": 28623.622546452527,
+     "heldout_misfit_bits": 9637.971340217271,
+     "split_by_people_misfit_bits": 4382.130034956943,
+     "split_in_time_misfit_bits": 4348.589234168814,
+     "params": [
+      7.525629020609773e-05,
+      5.489562140816162e-07,
+      2.186631989975826
+     ],
+     "together_apart": {
+      "together": 0.2653330844706673,
+      "apart": 0.1266870600508192
+     }
+    }
+   },
+   "check_models": {
+    "group_rate": {
+     "heldout_misfit_bits": 9349.379529374026,
+     "params": [
+      2.182379225822098e-05,
+      6.362330341203028e-07,
+      0.0010079251213564301
+     ],
+     "together_apart": {
+      "together": 0.61187019070991,
+      "apart": 0.03852126056014382
+     }
+    }
+   }
+  },
+  {
+   "world": "mixed",
+   "record": "log",
+   "adopted": 0.5549999999999999,
+   "n_pairs": 1662,
+   "n_groups": 240,
+   "true": {
+    "together": 0.46050321913493253,
+    "apart": 0.11052018191351742
+   },
+   "models": {
+    "graph_linear": {
+     "structure_bits": 8255.301818626636,
+     "structure_bits_cliques": 5834.870882572057,
+     "rule_bits": 9.76487159073609,
+     "fitted_message_bits": 19211.24951046992,
+     "heldout_misfit_bits": 11286.382759174387,
+     "split_by_people_misfit_bits": 5588.848651483866,
+     "split_in_time_misfit_bits": 5352.601926168266,
+     "params": [
+      0.0001849485554263084,
+      1.3811704316865082e-13,
+      1.0
+     ],
+     "together_apart": {
+      "together": 0.2831634296843928,
+      "apart": 0.2831634296843928
+     }
+    },
+    "graph_nonlinear": {
+     "structure_bits": 8255.301818626636,
+     "structure_bits_cliques": 5834.870882572057,
+     "rule_bits": 14.647307386104135,
+     "fitted_message_bits": 19143.98915305731,
+     "heldout_misfit_bits": 11216.198117373862,
+     "split_by_people_misfit_bits": 5552.960823669711,
+     "split_in_time_misfit_bits": 5333.1034006441705,
+     "params": [
+      0.00011482352086792642,
+      2.483985862917167e-15,
+      1.6109046315797408
+     ],
+     "together_apart": {
+      "together": 0.2706843747588231,
+      "apart": 0.18672204318347319
+     }
+    },
+    "hypergraph": {
+     "structure_bits": 5367.836707056508,
+     "structure_bits_cliques": 5367.836707056508,
+     "rule_bits": 14.647307386104135,
+     "fitted_message_bits": 16256.524041487184,
+     "heldout_misfit_bits": 11216.198117373862,
+     "split_by_people_misfit_bits": 5552.960823669711,
+     "split_in_time_misfit_bits": 5333.1034006441705,
+     "params": [
+      0.00011482352086792642,
+      2.483985862917167e-15,
+      1.6109046315797408
+     ],
+     "together_apart": {
+      "together": 0.2706843747588231,
+      "apart": 0.18672204318347319
+     }
+    }
+   },
+   "check_models": {
+    "group_rate": {
+     "heldout_misfit_bits": 11077.569267338455,
+     "params": [
+      6.755052398356924e-05,
+      4.910849572400315e-15,
+      0.0005136992168444472
+     ],
+     "together_apart": {
+      "together": 0.44229227175467023,
+      "apart": 0.11448948144712356
+     }
+    }
+   }
+  },
+  {
+   "world": "mixed",
+   "record": "sensors",
+   "adopted": 0.5549999999999999,
+   "n_pairs": 1603,
+   "n_groups": 1368,
+   "true": {
+    "together": 0.46050321913493253,
+    "apart": 0.11052018191351742
+   },
+   "models": {
+    "graph_linear": {
+     "structure_bits": 8049.757628920262,
+     "structure_bits_cliques": 5944.764786537335,
+     "rule_bits": 9.76487159073609,
+     "fitted_message_bits": 20653.01419470937,
+     "heldout_misfit_bits": 12909.576042080915,
+     "split_by_people_misfit_bits": 6387.789634077407,
+     "split_in_time_misfit_bits": 6050.153229816836,
+     "params": [
+      0.00028481281208997763,
+      1.712887481134048e-06,
+      1.0
+     ],
+     "together_apart": {
+      "together": 0.4011014505641317,
+      "apart": 0.4011014505641317
+     }
+    },
+    "graph_nonlinear": {
+     "structure_bits": 8049.757628920262,
+     "structure_bits_cliques": 5944.764786537335,
+     "rule_bits": 14.647307386104135,
+     "fitted_message_bits": 20657.888610541093,
+     "heldout_misfit_bits": 12909.31557147547,
+     "split_by_people_misfit_bits": 6389.187377871371,
+     "split_in_time_misfit_bits": 6050.045455114905,
+     "params": [
+      0.0002838154861810768,
+      1.712925693030395e-06,
+      1.0089227343913798
+     ],
+     "together_apart": {
+      "together": 0.40192389388386063,
+      "apart": 0.40002535028042285
+     }
+    },
+    "hypergraph": {
+     "structure_bits": 19870.75173432793,
+     "structure_bits_cliques": 19870.75173432793,
+     "rule_bits": 14.647307386104135,
+     "fitted_message_bits": 31689.494862616466,
+     "heldout_misfit_bits": 12126.129644495273,
+     "split_by_people_misfit_bits": 5998.4785188414935,
+     "split_in_time_misfit_bits": 5812.403682913809,
+     "params": [
+      0.00014130696762315392,
+      8.509449888740027e-07,
+      1.435767209104842
+     ],
+     "together_apart": {
+      "together": 0.29110287884984665,
+      "apart": 0.2245816134788864
+     }
+    }
+   },
+   "check_models": {
+    "group_rate": {
+     "heldout_misfit_bits": 12234.62449043992,
+     "params": [
+      9.864514515437459e-05,
+      1.2095278331061899e-06,
+      0.0005490039085490508
+     ],
+     "together_apart": {
+      "together": 0.48914259518953807,
+      "apart": 0.16269029689785508
+     }
+    }
+   }
+  }
+ ]
+}

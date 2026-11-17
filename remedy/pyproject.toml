@@ -1,9 +1,0 @@
-[project]
-name = "remedy"
-version = "0.1.0"
-description = "Side test: a graph model with a group term, fitted to the simulated study"
-requires-python = ">=3.11"
-dependencies = ["numpy", "scipy"]
-
-[tool.uv]
-package = false

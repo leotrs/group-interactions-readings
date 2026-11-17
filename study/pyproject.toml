@@ -1,10 +1,23 @@
 [project]
-name = "hoi-study"
-version = "0.1.0"
+name = "group-interactions-readings"
+version = "1.0.0"
+description = "Simulated benchmark of the Perspective 'Group interactions in the data, in the best model, or in the system'"
+readme = "README.md"
+license = "MIT"
 requires-python = ">=3.15"
 dependencies = [
     "numpy>=2.5.4",
     "scipy>=1.18.1",
-    "pytest>=9.2.0",
     "matplotlib>=3.11.2",
+    "pillow",
 ]
+
+[dependency-groups]
+dev = ["pytest>=9.2.0"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

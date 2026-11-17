@@ -14,8 +14,8 @@ Two other ways of holding out data are possible when only one process is recorde
 
 <picture>
   <source media="(prefers-color-scheme: dark)"
-          srcset="outputs/figures/holdout_pilot_dark.png">
-  <img src="outputs/figures/holdout_pilot.png" width="100%"
+          srcset="outputs/figures/figure_s2_dark.png">
+  <img src="outputs/figures/figure_s2.png" width="100%"
        alt="Runs won by each model under three ways of holding out data, on the meeting
             log and on the sensors.">
 </picture>
@@ -26,7 +26,7 @@ way of holding out data. Left: meeting log. Right: sensors. A tied run counts fo
 model in the tie, and models whose scores are equal up to numerical error tie. On the
 log, the nonlinear graph model and the hypergraph model make identical predictions
 (File S1), so they tie in every run that the linear graph model does not win alone.
-Source: `just figure`, outputs/runs/pilot.
+Source: `just figures`, outputs/runs/main.
 
 On the log, the second process and the split by people agree: in the pairwise world the
 linear graph model wins alone in 12 and 10 runs, and in the other two worlds in at most

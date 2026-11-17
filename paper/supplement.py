@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 FILES = {"S1": ROOT / "study/SIMULATION.md", "S2": ROOT / "study/supplement.md",
-         "S3": ROOT / "remedy/SUPPLEMENT.md"}
+         "S3": ROOT / "independent_check/SUPPLEMENT.md"}
 OUT = Path(__file__).resolve().parent / "supplement"
 
 

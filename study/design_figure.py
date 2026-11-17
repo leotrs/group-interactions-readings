@@ -1,8 +1,9 @@
-"""Figure of the study design: worlds, records, models, scores and settings.
+"""Figure 1 of the paper: the design of the study (worlds, records, models, scores and
+settings).
 
 Usage: uv run python design_figure.py
-Writes outputs/figures/design.{pdf,tif,png} and design_dark.png. The adoption rates
-are read from the tuned pilot parameters, so the figure matches the simulation.
+Writes outputs/figures/figure1.{pdf,tif,png} and figure1_dark.png. The adoption rates
+are read from the tuned main setting, so the figure matches the simulation.
 """
 
 import json
@@ -11,11 +12,10 @@ from itertools import combinations
 import matplotlib.pyplot as plt
 import numpy as np
 
-from common import OUTPUTS, PILOT, SWEEP, settings, tuned_path
-from figure import ink, save, style
-from world import Params, rate
+from settings import MAIN, OUTPUTS, SWEEP, settings, tuned_path
+from style import WIDTH, ink, left_axis, save, style
+from world import WORLDS, Params, rate
 
-WORLDS = {"independent": "pairwise", "joint": "group", "both": "mixed"}
 # One gathering of five people, and the pairs that one sensor sample detected. Fixed
 # by hand so that the example shows a gathering split into two partial groups.
 PEOPLE = 5
@@ -25,25 +25,23 @@ DETECTED = [(0, 1), (1, 2), (3, 4), (0, 2)]
 def worlds_panel(ax, p, t):
     style(ax, "(A) Worlds", t)
     k = np.arange(0, PEOPLE + 1)
-    dashes = {"independent": "-", "joint": "--", "both": ":"}
-    for mech, name in WORLDS.items():
-        r = [3600 * rate(mech, int(x), p) for x in k]
+    dashes = {"pairwise": "-", "group": "--", "mixed": ":"}
+    for w in WORLDS:
+        r = [3600 * rate(w, int(x), p) for x in k]
         # The group part of the rate switches on at two adopters. A line from 1 to 2
         # would read as a gradual rise, so the line runs on the linear part up to 2 and
         # then rises vertically.
         jump = 2 * r[1] - r[0]
-        ax.plot([0, 1, 2, 2, *k[3:]], [r[0], r[1], jump, *r[2:]], ls=dashes[mech],
-                color=t[mech], lw=2.0)
-        ax.plot(k, r, "o", ls="none", color=t[mech], ms=4)
-        ax.text(k[-1] + 0.15, r[-1], name, fontsize=8, va="center", color=t["text"])
+        ax.plot([0, 1, 2, 2, *k[3:]], [r[0], r[1], jump, *r[2:]], ls=dashes[w],
+                color=t[w], lw=2.0)
+        ax.plot(k, r, "o", ls="none", color=t[w], ms=4)
+        ax.text(k[-1] + 0.15, r[-1], w, fontsize=8, va="center", color=t["text"])
     ax.set_xlim(0, PEOPLE + 1.6)
     ax.set_xticks(k)
     ax.set_yticks(range(5))
     ax.set_xlabel("adopters in the gathering", fontsize=8, color=t["muted"])
     ax.set_ylabel("adoption rate, per hour", fontsize=8, color=t["muted"])
-    ax.spines["left"].set_visible(True)
-    ax.spines["left"].set_color(t["axis"])
-    ax.spines["left"].set_linewidth(2.0)
+    left_axis(ax, t)
 
 
 def components(n, pairs):
@@ -116,13 +114,13 @@ def records_panel(ax, t):
 
 # How each hyperparameter of the sweep is shown, and in what unit.
 SHOWN = {
-    "partners_per_day": ("people met a day", lambda v: f"{v:g}"),
-    "d": ("sensor detection probability", lambda v: f"{v:g}"),
-    "interval": ("sensor sampling interval", lambda v: f"{v:g} s"),
-    "delta": ("delay in recorded adoption times", lambda v: f"{v / 60:g} min"),
-    "processes": ("spreading processes fitted", lambda v: f"{v}"),
-    "grouping": ("sensor groups", lambda v: {"parts": "connected pairs",
-                                             "gathering": "true gatherings"}[v]),
+    "people_met_per_day": ("people met a day", lambda v: f"{v:g}"),
+    "detection_probability": ("sensor detection probability", lambda v: f"{v:g}"),
+    "sampling_interval": ("sensor sampling interval", lambda v: f"{v:g} s"),
+    "adoption_delay": ("delay in recorded adoption times", lambda v: f"{v / 60:g} min"),
+    "processes_fitted": ("spreading processes fitted", lambda v: f"{v}"),
+    "sensor_groups": ("sensor groups", lambda v: {"components": "connected pairs",
+                                                  "gatherings": "true gatherings"}[v]),
 }
 
 
@@ -133,7 +131,7 @@ def models_panel(ax, t):
     graph models count one adopter in contact, the hypergraph model two in the group."""
     style(ax, "(C) Models", t)
     nu = 2
-    rates = {"G-lin": 1, "G-nonlin": 1 ** nu, "H": 2 ** nu}
+    rates = {"graph_linear": 1, "graph_nonlinear": 1 ** nu, "hypergraph": 2 ** nu}
     # The bars are named below, so that they can be read without color.
     for x, (m, r) in enumerate(rates.items()):
         ax.bar(x, r, 0.7, color=t[m], lw=0)
@@ -143,9 +141,7 @@ def models_panel(ax, t):
     ax.set_ylim(0, 4.4)
     ax.set_ylabel("rate, with $\\lambda = 1$, $\\nu = 2$", fontsize=8,
                   color=t["muted"])
-    ax.spines["left"].set_visible(True)
-    ax.spines["left"].set_color(t["axis"])
-    ax.spines["left"].set_linewidth(2.0)
+    left_axis(ax, t)
     # The sensor group, drawn above the two short bars.
     inset = ax.inset_axes([0.06, 0.40, 0.6, 0.6])
     inset.axis("off")
@@ -205,7 +201,7 @@ def settings_panel(ax, t):
     rows = [("header", "hyperparameter", "main setting", "also tried, one at a time")]
     for k, vs in SWEEP.items():
         name, show = SHOWN[k]
-        rows.append(("row", name, show(PILOT[k]), ", ".join(show(v) for v in vs)))
+        rows.append(("row", name, show(MAIN[k]), ", ".join(show(v) for v in vs)))
     cols = (0.0, 0.45, 0.68)
     step = 1 / len(rows)
     y = 1 - step / 2
@@ -222,9 +218,8 @@ def settings_panel(ax, t):
 
 
 def draw(t):
-    params = json.loads(tuned_path(settings("pilot")).read_text())["params"]
-    p = Params(**params)
-    fig = plt.figure(figsize=(180 / 25.4, 5.4), facecolor=t["surface"])
+    p = Params(**json.loads(tuned_path(settings("main")).read_text())["params"])
+    fig = plt.figure(figsize=(WIDTH, 5.4), facecolor=t["surface"])
     grid = fig.add_gridspec(2, 3, height_ratios=[1, 0.9], width_ratios=[1, 1.15, 1])
     worlds_panel(fig.add_subplot(grid[0, 0]), p, t)
     records_panel(fig.add_subplot(grid[0, 1]), t)
@@ -238,7 +233,7 @@ def draw(t):
 def main():
     out = OUTPUTS / "figures"
     out.mkdir(parents=True, exist_ok=True)
-    save(draw, out / "design")
+    save(draw, out / "figure1")
 
 
 if __name__ == "__main__":

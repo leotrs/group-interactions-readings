@@ -38,7 +38,7 @@ seconds unless stated. The code that implements each part is named in brackets.
 - Spreading is simulated exactly: between the start or end of a gathering and the next
   adoption, all rates are constant, so the time to the next adoption is exponential.
 
-## Runs and records [run.py, record.py]
+## Runs and records [run.py, records.py]
 
 - A run draws one set of gatherings, then, for each world, two independent spreading
   processes over them, each with its own 24 first adopters. The first process is used
@@ -52,7 +52,7 @@ seconds unless stated. The code that implements each part is named in brackets.
   of pairs detected at that sample, each present for the same 20 seconds. The sensor
   record also includes the adoption times.
 
-## Models and fitting [model.py]
+## Models and fitting [models.py]
 
 - For a person i who has not adopted, with a_i adopters in contact now and a_e adopters
   in each current recorded group e:
@@ -68,7 +68,7 @@ seconds unless stated. The code that implements each part is named in brackets.
   5]) and nu in [0.05, 6], from 9 starting points for the linear model and 36 for the
   others; the best fit is kept.
 
-## Scores [run.py, structure.py, report.py]
+## Scores [run.py, codes.py, results.py]
 
 - Structure bits (Rommens et al., Proposition 7; the mixed-size form is ours). Only who
   met whom is coded, not when.
@@ -87,7 +87,7 @@ seconds unless stated. The code that implements each part is named in brackets.
 - Message length: structure bits plus rule bits plus misfit.
 - Ties: models whose scores differ by at most 1e-6 bits share the win.
 
-## Causal effect [run.py, model.py]
+## Causal effect [run.py, models.py]
 
 - A person who has not adopted meets two adopters either together, in one gathering of
   15 minutes, or one at a time, in two gatherings of 15 minutes each. The effect is the
@@ -99,7 +99,7 @@ seconds unless stated. The code that implements each part is named in brackets.
   linear graph model). These are the same for a record of either kind.
 - Reported: the median over runs, with the interquartile range.
 
-## Settings [common.py, record.py, run.py, tune.py]
+## Settings [settings.py, records.py, run.py, tune.py]
 
 The main setting uses the values above. Each other setting changes one hyperparameter
 from its main value, for 14 settings in all (the main one and 13 changes). Each setting
@@ -121,7 +121,7 @@ has 20 runs, with run seeds 0 to 19.
   first sample to the end of its last. The second uses the true gathering times, which
   real sensors do not record, and serves only as a check.
 
-## Model with a group rate, for the causal effect only [model.py, run.py]
+## Model with a group rate, for the causal effect only [models.py, run.py]
 
 - rate = lam * a_i + mu * (number of the person's current recorded groups e with a_e >= 2)
   + b, with a_i and a_e as in "Models and fitting". On the meeting log a person is in

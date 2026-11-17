@@ -1,0 +1,31 @@
+# Run the tests and check that the code reproduces the saved results, on every push.
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: study
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Unit tests
+        run: uv run pytest -q
+      - name: Recompute the tuning and three runs, and compare with the saved results
+        run: uv run python verify.py
+
+  independent-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: independent_check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Implementation checks
+        run: uv run python check.py

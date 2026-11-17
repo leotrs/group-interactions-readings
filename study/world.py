@@ -1,7 +1,8 @@
-"""The simulated world: random gatherings and three adoption mechanisms (spec.md).
+"""The simulated event: people meet in gatherings, and a behavior spreads among them.
 
-Times are in seconds of event time: 3 days of 8 hours, run back to back. Gatherings do
-not depend on adoption, so they are generated first and adoption runs on top of them.
+Times are in seconds of event time: 3 days of 8 hours, one after the other. Gatherings
+do not depend on adoption, so they are drawn first and spreading runs on top of them.
+The three worlds differ only in the adoption rate (`rate`).
 """
 
 from dataclasses import dataclass, replace
@@ -10,20 +11,22 @@ import numpy as np
 
 HOUR = 3600.0
 DAY = 8 * HOUR
-MECHANISMS = ("independent", "joint", "both")
+WORLDS = ("pairwise", "group", "mixed")
 
 
 @dataclass(frozen=True)
 class Params:
-    n: int = 200
+    """The event and the spreading. tune.py sets gathering_rate, n_first_adopters and
+    lam; the defaults here are only starting values for tuning and for tests."""
+    n_people: int = 200
     days: int = 3
     min_size: int = 2
     max_size: int = 6
     mean_duration: float = 900.0
-    gathering_rate: float = 100 / DAY  # gatherings started per second; calibrated
-    n_seeds: int = 10
-    lam: float = 1 / HOUR  # independent mechanism, per adopter present
-    mu: float = 1 / 900.0  # joint mechanism, while two or more adopters are present
+    gathering_rate: float = 100 / DAY  # gatherings started per second
+    n_first_adopters: int = 10
+    lam: float = 1 / HOUR  # pairwise world: rate per adopter in the gathering
+    mu: float = 1 / 900.0  # group world: rate while two or more adopters are present
 
     @property
     def t_max(self):
@@ -34,14 +37,15 @@ class Params:
 class Gatherings:
     start: np.ndarray
     end: np.ndarray
-    members: list
+    members: list  # one sorted array of people per gathering
 
 
 def gatherings(p: Params, rng) -> Gatherings:
-    """Gatherings start at random times. Each draws its size uniformly from min_size to
-    max_size and its members from the people not already in a gathering."""
+    """Gatherings start at the times of a Poisson process. Each draws its size uniformly
+    from min_size to max_size and its members from the people who are not already in a
+    gathering, so each person is in at most one gathering at a time."""
     times = np.sort(rng.uniform(0, p.t_max, rng.poisson(p.gathering_rate * p.t_max)))
-    busy_until = np.zeros(p.n)
+    busy_until = np.zeros(p.n_people)
     starts, ends, members = [], [], []
     for t in times:
         free = np.flatnonzero(busy_until <= t)
@@ -57,58 +61,61 @@ def gatherings(p: Params, rng) -> Gatherings:
     return Gatherings(np.array(starts), np.array(ends), members)
 
 
-def partners_per_day(g: Gatherings, p: Params) -> float:
-    """Mean number of distinct people each person is with, per day."""
+def people_met_per_day(g: Gatherings, p: Params) -> float:
+    """Mean number of distinct other people that a person shares a gathering with in a
+    day, counting the gatherings that start in that day."""
     total = 0
     for day in range(p.days):
-        seen = [set() for _ in range(p.n)]
+        seen = [set() for _ in range(p.n_people)]
         for s, x in zip(g.start, g.members):
             if day * DAY <= s < (day + 1) * DAY:
                 for i in x:
                     seen[i].update(x)
         total += sum(len(s) - (i in s) for i, s in enumerate(seen))
-    return total / (p.n * p.days)
+    return total / (p.n_people * p.days)
 
 
 def calibrate_gathering_rate(p: Params, target=6.0, runs=5, seed=0) -> float:
-    """Gathering rate at which people meet `target` distinct people a day on average."""
+    """The gathering rate at which people meet `target` distinct people a day, found by
+    bisection over the average of `runs` draws of the gatherings."""
     lo, hi = 1 / DAY, 2000 / DAY
     for _ in range(25):
         mid = (lo + hi) / 2
         q = replace(p, gathering_rate=mid)
         rng = np.random.default_rng(seed)
-        got = np.mean([partners_per_day(gatherings(q, rng), q) for _ in range(runs)])
+        got = np.mean([people_met_per_day(gatherings(q, rng), q) for _ in range(runs)])
         lo, hi = (mid, hi) if got < target else (lo, mid)
     return (lo + hi) / 2
 
 
-def rate(mechanism, k, p: Params) -> float:
-    """Adoption rate of a non-adopter in a gathering with k adopters."""
-    if mechanism == "independent":
+def rate(world, k, p: Params) -> float:
+    """Adoption rate of a person who has not adopted, in a gathering with k adopters."""
+    if world == "pairwise":
         return p.lam * k
-    if mechanism == "joint":
+    if world == "group":
         return p.mu if k >= 2 else 0.0
-    if mechanism == "both":
+    if world == "mixed":
         return p.lam / 2 * k + (p.mu / 2 if k >= 2 else 0.0)
-    raise ValueError(mechanism)
+    raise ValueError(world)
 
 
-def spread(g: Gatherings, mechanism, p: Params, rng, seeds) -> np.ndarray:
-    """Adoption times (inf if never). Rates change only when a gathering starts or ends
-    or someone adopts, so between those moments the next adoption is exponential."""
-    t_adopt = np.full(p.n, np.inf)
-    t_adopt[list(seeds)] = 0.0
+def spread(g: Gatherings, world, p: Params, rng, first_adopters) -> np.ndarray:
+    """Adoption times, inf for people who never adopt. Rates change only when a
+    gathering starts or ends or someone adopts, so between those moments the time to
+    the next adoption is exponential and the simulation is exact."""
+    t_adopt = np.full(p.n_people, np.inf)
+    t_adopt[list(first_adopters)] = 0.0
     adopted = np.isfinite(t_adopt)
+    # At equal times, gatherings end before others start.
     boundaries = sorted([(e, 0, m) for m, e in enumerate(g.end)]
-                        + [(s, 1, m) for m, s in enumerate(g.start)])  # ends first
+                        + [(s, 1, m) for m, s in enumerate(g.start)])
     active = set()
     t, b = 0.0, 0
     while True:
         people, rates = [], []
         for m in active:
             x = g.members[m]
-            k = int(adopted[x].sum())
-            r = rate(mechanism, k, p)
+            r = rate(world, int(adopted[x].sum()), p)
             if r > 0:
                 for i in x[~adopted[x]]:
                     people.append(i)
@@ -124,17 +131,19 @@ def spread(g: Gatherings, mechanism, p: Params, rng, seeds) -> np.ndarray:
             adopted[i] = True
             t_adopt[i] = t
         else:
-            t, kind, m = boundaries[b]
+            t, starts, m = boundaries[b]
             b += 1
-            (active.add if kind == 1 else active.discard)(m)
+            (active.add if starts else active.discard)(m)
     return t_adopt
 
 
-def adoption_fraction(p: Params, mechanism, runs, seed) -> float:
+def adoption_fraction(p: Params, world, runs, seed) -> float:
+    """Share of people who adopt by the end, first adopters included, averaged over
+    `runs` independent events."""
     rng = np.random.default_rng(seed)
     out = []
     for _ in range(runs):
         g = gatherings(p, rng)
-        seeds = rng.choice(p.n, p.n_seeds, replace=False)
-        out.append(np.isfinite(spread(g, mechanism, p, rng, seeds)).mean())
+        first = rng.choice(p.n_people, p.n_first_adopters, replace=False)
+        out.append(np.isfinite(spread(g, world, p, rng, first)).mean())
     return float(np.mean(out))

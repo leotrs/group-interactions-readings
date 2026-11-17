@@ -3,3 +3,4 @@ __pycache__/
 .pytest_cache/
 .coverage
 paper/perspective.html
+paper/submission/

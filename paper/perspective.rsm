@@ -199,8 +199,8 @@ File S1 gives the full specification of the study.
 
 :figure: {
   :label: fig-design
-  :path: figs/design.png
-  :dark: figs/design_dark.png
+  :path: figs/figure1.png
+  :dark: figs/figure1_dark.png
   :scale: 0.34
   :alt: Five panels that describe the simulated study. (A) Adoption rate against the number of adopters in the gathering. It rises in a straight line in the pairwise world, jumps from zero to its highest value at two adopters in the group world, and does both at half strength in the mixed world. (B) A gathering of five people. The meeting log records all ten pairs and one group. One sensor sample records four pairs, which form two groups. (C) A sensor group holds a person, an adopter detected with the person, another person, and a second adopter detected only with that other person. The linear and nonlinear graph models count one adopter in contact and give a rate of 1. The hypergraph model counts two adopters in the group and gives a rate of 4. (D) The message length is the sum of the bits for the record, the rule and the misfit. The held-out misfit is the last part alone. (E) The six hyperparameters, each with its main value and the values tried one at a time.
 }
@@ -222,8 +222,8 @@ data science into description, prediction and causal inference (:ref:sec-argumen
 
 :figure: {
   :label: fig-wins
-  :path: figs/wins_pilot.png
-  :dark: figs/wins_pilot_dark.png
+  :path: figs/figure2.png
+  :dark: figs/figure2_dark.png
   :scale: 0.34
   :alt: Results in the main setting. (A) Under the message length, the hypergraph model wins all 20 runs on the meeting log in every world, and a graph model wins all 20 runs on the sensors in every world. (B) Under the held-out misfit, on the meeting log the nonlinear graph model and the hypergraph model make identical predictions, so they tie in every run that the linear graph model does not win alone, and the linear graph model wins 12 runs in the pairwise world and 2 in the mixed world. On the sensors, the hypergraph model wins all 20 runs in every world. (C) The true effect of meeting two adopters together rather than one at a time is 0 points in the pairwise world, 63 in the group world and 35 in the mixed world. The three compared models predict effects of about 15 points or less in every world and on both records. The linear graph model with an added group rate, drawn as hollow diamonds, predicts close to the true effect on the meeting log in the group and mixed worlds, and about 10 points on the sensors in the pairwise world.
 }

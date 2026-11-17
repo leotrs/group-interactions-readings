@@ -1,0 +1,25 @@
+# Checks of the implementation on 3 seeds, and of the share who adopt (about 10 s).
+check:
+    nice -n 20 uv run python check.py
+
+# The 20 runs of the main setting with 3 worker processes, then RESULTS.md.
+run:
+    nice -n 20 uv run python main.py --runs 20
+    uv run python report.py
+
+# Rewrite and print RESULTS.md from the saved results/runs.json.
+report:
+    uv run python report.py
+
+# Rerun the 20 runs into a temporary file and check that it equals results/runs.json.
+verify:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    tmp="$(mktemp -d)/runs.json"
+    nice -n 20 uv run python main.py --runs 20 --out "$tmp"
+    if cmp -s "$tmp" results/runs.json; then
+        echo "The rerun is identical to results/runs.json."
+    else
+        echo "The rerun differs from results/runs.json (new file: $tmp)." >&2
+        exit 1
+    fi

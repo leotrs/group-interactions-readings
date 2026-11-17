@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this code or its results, please cite the paper."
+title: "Group interactions in the data, in the best model, or in the system: code and results"
+type: software
+authors:
+  - family-names: Torres
+    given-names: Leo
+    email: leo@leotrs.com
+    affiliation: "Independent researcher, Leipzig, Germany"
+license: MIT
+repository-code: "https://github.com/leotrs/group-interactions-readings"
+version: 1.0.0
+date-released: 2026-11-17
+preferred-citation:
+  type: article
+  title: "Group interactions in the data, in the best model, or in the system"
+  authors:
+    - family-names: Torres
+      given-names: Leo
+  journal: "Frontiers in Complex Systems (submitted)"
+  notes: "Perspective, submitted to the Research Topic 'Higher order versus pairwise interactions: A modeling debate'"

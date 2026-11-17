@@ -1,0 +1,18 @@
+{
+ "params": {
+  "n_people": 200,
+  "days": 3,
+  "min_size": 2,
+  "max_size": 6,
+  "mean_duration": 900.0,
+  "gathering_rate": 0.0030220416741859575,
+  "n_first_adopters": 24,
+  "lam": 0.0001301316235418113,
+  "mu": 0.0011111111111111111
+ },
+ "adoption_fractions": {
+  "pairwise": 0.5026666666666667,
+  "group": 0.48283333333333345,
+  "mixed": 0.6073333333333334
+ }
+}

@@ -6,9 +6,6 @@ the PDF version named in each entry. For sources read as Europe PMC XML there ar
 page numbers, so the section is given instead. Numbers marked "my arithmetic" are not in
 the source; they are computed from quoted numbers.
 
-Copies of all files read are in
-/private/tmp/claude-502/-Users-leo-torres-research-hoi-debate/fd90344c-4f41-4446-8221-642739b779f0/scratchpad/sources/
-
 Not read: Smieszek et al. 2014 (BMC Infect Dis 14:136) was downloaded as full-text XML
 but not used, because it used TelosB motes in a US high school, not SocioPatterns
 badges. Its 2016 follow-up at a conference with SocioPatterns badges (below) fits our

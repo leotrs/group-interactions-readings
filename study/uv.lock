@@ -82,23 +82,31 @@ wheels = [
 ]
 
 [[package]]
-name = "hoi-study"
-version = "0.1.0"
+name = "group-interactions-readings"
+version = "1.0.0"
 source = { virtual = "." }
 dependencies = [
     { name = "matplotlib" },
     { name = "numpy" },
-    { name = "pytest" },
+    { name = "pillow" },
     { name = "scipy" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "numpy", specifier = ">=2.5.4" },
-    { name = "pytest", specifier = ">=9.2.0" },
+    { name = "pillow" },
     { name = "scipy", specifier = ">=1.18.1" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=9.2.0" }]
 
 [[package]]
 name = "iniconfig"
